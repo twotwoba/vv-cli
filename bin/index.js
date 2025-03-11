@@ -47,14 +47,34 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
         // Create project directory
         const targetPath = path.resolve(process.cwd(), projectName)
 
+        // Check if template directory exists
+        if (!fs.existsSync(templatePath)) {
+            console.error(chalk.red(`Error: Template directory not found at ${templatePath}`))
+            process.exit(1)
+        }
+
         // Copy template files
         console.log(chalk.blue('Creating project directory...'))
-        await fs.copy(templatePath, targetPath, {
-            filter: (src) => !src.includes('node_modules')
-        })
+        console.log(chalk.blue(`Template path: ${templatePath}`))
+        console.log(chalk.blue(`Target path: ${targetPath}`))
+        
+        try {
+            await fs.copy(templatePath, targetPath, {
+                filter: (src) => {
+                    // Skip node_modules and .git directories
+                    if (src.includes('node_modules') || src.includes('.git')) {
+                        return false
+                    }
+                    return true
+                }
+            })
+        } catch (error) {
+            console.error(chalk.red('Error copying template:'), error)
+            process.exit(1)
+        }
 
         // Update package.json
-        const pkgPath = path.join(targetPath, 'package.json')
+        const pkgPath = path.resolve(targetPath, 'package.json')
         const pkg = await fs.readJson(pkgPath)
         pkg.name = projectName
         await fs.writeJson(pkgPath, pkg, { spaces: 2 })
