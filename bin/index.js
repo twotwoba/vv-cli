@@ -59,7 +59,7 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
         console.log(chalk.blue(`Target path: ${targetPath}`))
         
         try {
-            await fs.copy(templatePath, targetPath, {
+            fs.copySync(templatePath, targetPath, {
                 filter: (src) => {
                     // Skip node_modules and .git directories
                     if (src.includes('node_modules') || src.includes('.git')) {
