@@ -1,0 +1,21 @@
+:root {
+    --primary-light: #3f7ef7;
+    --primary-dark: #17141b;
+}
+
+html {
+    font-size: 16px; /* 设为4则：1单位 = 0.25rem = 1px （不过，不推荐） */
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+html.dark {
+    color: var(--primary-light);
+    background: var(--primary-dark);
+}
