@@ -15,7 +15,7 @@
 ## 使用
 
 ```bash
-pnpm i vv-cli -g
+pnpm i @twotwoba/vv-cli -g
 
 vv [project-name]
 ```
