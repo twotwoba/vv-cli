@@ -11,10 +11,13 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const templatePath = path.resolve(__dirname, '../template')
 
+// Read package.json to get version
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
+
 program
     .name('vv-cli')
     .description('CLI tool for creating Vue3 + Vite + Naive UI + Unocss template projects')
-    .version('1.0.0')
+    .version(packageJson.version)
 
 program.argument('[project-name]', 'Name of the project').action(async (projectName) => {
     try {
@@ -47,9 +50,7 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
         // Copy template files
         console.log(chalk.blue('Creating project directory...'))
         await fs.copy(templatePath, targetPath, {
-            filter: (src) => {
-                return !src.includes('node_modules') && !src.includes('.git')
-            }
+            filter: (src) => !src.includes('node_modules')
         })
 
         // Update package.json
