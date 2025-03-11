@@ -59,25 +59,27 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
         console.log(chalk.blue(`Target path: ${targetPath}`))
         
         try {
-            fse.copySync(templatePath, targetPath, {
-                filter: (src) => {
-                    // Skip node_modules and .git directories
-                    if (src.includes('node_modules') || src.includes('.git')) {
-                        return false
-                    }
-                    return true
-                }
-            })
+           await fse.copy(templatePath, targetPath, 
+            // {
+            //     filter: (src) => {
+            //         // Skip node_modules and .git directories
+            //         if (src.includes('node_modules') || src.includes('.git')) {
+            //             return false
+            //         }
+            //         return true
+            //     }
+            // }
+        )
         } catch (error) {
             console.error(chalk.red('Error copying template:'), error)
             process.exit(1)
         }
 
-        // Update package.json
-        const pkgPath = path.resolve(targetPath, 'package.json')
-        const pkg = await fse.readJson(pkgPath)
-        pkg.name = projectName
-        await fse.writeJson(pkgPath, pkg, { spaces: 2 })
+        // // Update package.json
+        // const pkgPath = path.resolve(targetPath, 'package.json')
+        // const pkg = await fse.readJson(pkgPath)
+        // pkg.name = projectName
+        // await fse.writeJson(pkgPath, pkg, { spaces: 2 })
 
         console.log(chalk.green('\n✨ Project created successfully!'))
         console.log('\nNext steps:')
