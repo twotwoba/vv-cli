@@ -2,7 +2,7 @@
 
 import { program } from 'commander'
 import inquirer from 'inquirer'
-import fs from 'fs-extra'
+import fse from 'fs-extra'
 import path from 'path'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename)
 const templatePath = path.resolve(__dirname, '../template')
 
 // Read package.json to get version
-const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
+const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
 
 program
     .name('vv-cli')
@@ -30,7 +30,7 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
                     message: 'Please enter your project name:',
                     validate: (input) => {
                         if (!input) return 'Project name is required'
-                        if (fs.existsSync(input)) return 'Directory already exists'
+                        if (fse.existsSync(input)) return 'Directory already exists'
                         return true
                     }
                 }
@@ -39,7 +39,7 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
         }
 
         // Check if directory already exists
-        if (fs.existsSync(projectName)) {
+        if (fse.existsSync(projectName)) {
             console.error(chalk.red(`Error: Directory ${projectName} already exists`))
             process.exit(1)
         }
@@ -49,15 +49,13 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
 
         // Copy template files
         console.log(chalk.blue('Creating project directory...'))
-        await fs.copy(templatePath, targetPath, {
-            filter: (src) => !src.includes('node_modules')
-        })
+        await fse.copy(templatePath, targetPath)
 
         // Update package.json
         const pkgPath = path.join(targetPath, 'package.json')
-        const pkg = await fs.readJson(pkgPath)
+        const pkg = await fse.readJson(pkgPath)
         pkg.name = projectName
-        await fs.writeJson(pkgPath, pkg, { spaces: 2 })
+        await fse.writeJson(pkgPath, pkg, { spaces: 2 })
 
         console.log(chalk.green('\n✨ Project created successfully!'))
         console.log('\nNext steps:')
