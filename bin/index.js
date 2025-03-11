@@ -53,12 +53,6 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
             filter: (src) => !src.includes('node_modules')
         })
 
-        // Update package.json
-        const pkgPath = path.join(targetPath, 'package.json')
-        const pkg = await fs.readJson(pkgPath)
-        pkg.name = projectName
-        await fs.writeJson(pkgPath, pkg, { spaces: 2 })
-
         console.log(chalk.green('\n✨ Project created successfully!'))
         console.log('\nNext steps:')
         console.log(chalk.cyan(`  cd ${projectName}`))
