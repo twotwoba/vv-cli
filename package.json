@@ -1,6 +1,6 @@
 {
     "name": "@twotwoba/vv-cli",
-    "version": "1.0.8",
+    "version": "2.0.0",
     "description": "CLI tool for creating Vue3 + Vite + Naive UI + Unocss template projects",
     "type": "module",
     "bin": {
