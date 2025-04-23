@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { setupInterceptors } from './interceptors'
+import { setupInterceptors } from './interceptors.ts'
 import { ServiceEnum } from './service-enum.ts'
 
 export function createAxios(options = {}) {
     const defaultOptions = {
         baseURL: import.meta.env.VITE_AXIOS_BASE_URL,
-        timeout: 40000,
+        timeout: 5000,
         headers: {
             'Content-Type': 'application/json'
             // ...
@@ -19,6 +19,9 @@ export function createAxios(options = {}) {
     return service
 }
 
+/**
+ * 多种请求实例
+ */
 export const request = createAxios()
 
 export const ADemoRequest = createAxios({

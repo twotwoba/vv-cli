@@ -1,0 +1,14 @@
+import { create } from 'zustand'
+
+type state = {
+    count: number
+}
+
+type action = {
+    increment: () => void
+}
+
+export const useCountStore = create<state & action>((set) => ({
+    count: 0,
+    increment: () => set((state) => ({ count: state.count + 1 }))
+}))

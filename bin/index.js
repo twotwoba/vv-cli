@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const templatePath = path.resolve(__dirname, '../template')
+const templatePath = path.resolve(__dirname, '../template-vue')
 
 // Read package.json to get version
 const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
