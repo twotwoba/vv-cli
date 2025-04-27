@@ -1,7 +1,7 @@
 {
     "name": "@twotwoba/vv-cli",
     "version": "2.1.0",
-    "description": "CLI tool for creating Vue3 + Vite + Naive UI + Unocss template projects",
+    "description": "CLI tool for creating Vue3 or React19 template projects by vite",
     "type": "module",
     "bin": {
         "vv": "./bin/index.js"
@@ -21,7 +21,11 @@
         "template",
         "swrv",
         "motion-v",
-        "cli"
+        "cli",
+        "React",
+        "tailwindcss",
+        "zustand",
+        "usehooks"
     ],
     "author": "eric.yuan",
     "license": "MIT",
