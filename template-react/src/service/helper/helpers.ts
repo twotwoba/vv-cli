@@ -1,5 +1,5 @@
 
-export function resolveError(code: number, message?: string, needTip = true) {
+export function resolveError(code: number, message?: string, _needTip = true) {
     switch (code) {
         case 401:
             // message.error('登录已过期，请重新登录')
@@ -17,6 +17,6 @@ export function resolveError(code: number, message?: string, needTip = true) {
             message = message ?? `【${code}】: 未知异常!`
             break
     }
-    // needTip && message.error(message)
+    // _needTip && message.error(message)
     return message
 }

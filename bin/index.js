@@ -9,14 +9,15 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const templatePath = path.resolve(__dirname, '../template-vue')
+const templatePathVue = path.resolve(__dirname, '../template-vue')
+const templatePathReact = path.resolve(__dirname, '../template-react')
 
 // Read package.json to get version
 const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
 
 program
     .name('vv-cli')
-    .description('CLI tool for creating Vue3 + Vite + Naive UI + Unocss template projects')
+    .description('CLI tool for creating Vue3/React + Vite projects')
     .version(packageJson.version)
 
 program.argument('[project-name]', 'Name of the project').action(async (projectName) => {
@@ -43,6 +44,22 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
             console.error(chalk.red(`Error: Directory ${projectName} already exists`))
             process.exit(1)
         }
+
+        // Ask for template type
+        const templateAnswer = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'template',
+                message: 'Select a template:',
+                choices: [
+                    { name: 'Vue3 + Vite + Naive UI + Unocss', value: 'vue' },
+                    { name: 'React19 + Vite + shadcn/ui + tailwindcss', value: 'react' }
+                ]
+            }
+        ])
+
+        // Set template path based on user choice
+        const templatePath = templateAnswer.template === 'vue' ? templatePathVue : templatePathReact
 
         // Create project directory
         const targetPath = path.resolve(process.cwd(), projectName)
