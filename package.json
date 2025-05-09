@@ -1,6 +1,6 @@
 {
     "name": "@twotwoba/vv-cli",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "CLI tool for creating Vue3 or React19 template projects by vite",
     "type": "module",
     "bin": {
