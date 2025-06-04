@@ -1,4 +1,6 @@
-# 🚀 Vue or React Development Templates
+[简体中文](README.zh-CN.md) | English
+
+# 🚀 React or Vue Development Templates
 
 Streamline your development workflow with these opinionated, feature-rich templates for Vue 3 and React 19, powered by Vite 5+. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
 
@@ -8,9 +10,11 @@ Streamline your development workflow with these opinionated, feature-rich templa
 
 We've taken care of the essential setup so you can focus on building amazing applications:
 
-* **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
-* **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
-* **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
+-   **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
+-   **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
+-   **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
+
+> [TODO] Rolldown is Coming soon!
 
 ---
 
