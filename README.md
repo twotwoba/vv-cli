@@ -1,37 +1,55 @@
-# vue or react 模板
+# 🚀 Vue or React Development Templates
 
-简化配置：
+Streamline your development workflow with these opinionated, feature-rich templates for Vue 3 and React 19, powered by Vite 5+. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
 
-1. settings.json，项目维度的 vscode 必要配置，保存自动格式化（结合 eslint,stylelint,prettier 集成），统一代码风格 （如有跨编辑器的情况，请自行安装依赖并配置，本模板只考虑统一使用 vscode 的情况）
-2. 指定包管理器 `pnpm`
-3. vite@5+
+---
 
-## Vue 3 + Vite 开发模板
+## 🛠️ Simplified Configuration
 
-该模板基于官方 [vue-ts](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) 模板，并添加了以下功能：
+We've taken care of the essential setup so you can focus on building amazing applications:
 
-1. auto plugin 自动引入 api or 组件
-2. unocss + iconify icon 图标方案
-3. 本地 icon 雪碧图组件
-4. 使用 motion 开发动画
-5. pinia 数据存储
-6. 预置了 axios 的配置
+* **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
+* **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
+* **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
 
-## React 19 + Vite 开发模板
+---
 
-该模板基于官方 [vue-ts](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) 模板，并添加了以下功能：
+## ⚛️ React 19 Development Template
 
-1. 使用 shadcn
-2. tailwindcss + lucide icon 方案
-3. swr 处理 get 请求
-4. useHooks 常用 hook
-5. zustand 数据存储
-6. 预置了 axios 的配置
+Based on the official [React-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) starter, this template comes packed with:
 
-## 使用
+1.  **Shadcn UI**: Beautifully designed, customizable UI components to accelerate your development.
+2.  **Tailwind CSS + Lucide Icons**: A utility-first CSS framework paired with a comprehensive, consistent icon set.
+3.  **SWR for Data Fetching**: A lightweight library for data fetching, caching, and revalidation, perfect for `GET` requests.
+4.  **useHooks**: A collection of frequently used, battle-tested React Hooks to enhance your component logic.
+5.  **Zustand State Management**: A small, fast, and scalable state management solution for React.
+6.  **Pre-configured Axios**: Ready-to-use setup for making HTTP requests.
+
+---
+
+## ✨ Vue 3 Development Template
+
+This template builds upon the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) starter, supercharging it with:
+
+1.  **Auto Imports**: Say goodbye to manual imports! Automatically import APIs and components for a smoother coding experience.
+2.  **Unocss + Iconify**: A powerful combination for styling and flexible icon management.
+3.  **Local Icon Sprites**: Efficiently manage and display your custom SVG icons with a pre-configured sprite component.
+4.  **Motion for Animations**: Easily craft stunning animations and transitions with the intuitive Motion library.
+5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
+6.  **Pre-configured Axios**: Get started with robust HTTP requests right out of the box.
+
+---
+
+## 🚀 Get Started
+
+It's incredibly easy to spin up a new project with these templates:
 
 ```bash
+# Install the CLI globally
 pnpm i @twotwoba/vv-cli -g
 
-vv [project-name]
+# Create a new project
+vv <your-project-name>
 ```
+
+Choose your preferred template and start building your next great application today!
