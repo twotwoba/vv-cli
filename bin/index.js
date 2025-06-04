@@ -66,7 +66,12 @@ program.argument('[project-name]', 'Name of the project').action(async (projectN
 
         // Copy template files
         console.log(chalk.blue('Creating project directory...'))
-        await fse.copy(templatePath, targetPath)
+        await fse.copy(templatePath, targetPath, {
+            filter: (src) => {
+                const basename = path.basename(src)
+                return basename !== 'node_modules' && basename !== '.git'
+            }
+        })
 
         // Update package.json
         const pkgPath = path.join(targetPath, 'package.json')
