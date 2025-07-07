@@ -1,0 +1,16 @@
+// useSWR hooks for API calls
+
+/* 
+demo:
+
+export const useUser = () => { 
+    const { data, error, isLoading, mutate } = useSWR('/api/user')
+    return {
+        user: data,
+        isLoading,
+        isError: !!error,
+        error,
+        refreshUser: mutate
+    }
+}
+*/

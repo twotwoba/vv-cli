@@ -20,27 +20,25 @@ We've taken care of the essential setup so you can focus on building amazing app
 
 ## ⚛️ React 19 Development Template
 
-Based on the official [React-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) starter, this template comes packed with:
+Based on the official [React-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) starter, supercharging it with:
 
 1.  **Shadcn UI**: Beautifully designed, customizable UI components to accelerate your development.
 2.  **Tailwind CSS + Lucide Icons**: A utility-first CSS framework paired with a comprehensive, consistent icon set.
-3.  **SWR for Data Fetching**: A lightweight library for data fetching, caching, and revalidation, perfect for `GET` requests.
+3.  **SWR + fetch**: A lightweight library for data fetching, caching, and revalidation..
 4.  **useHooks**: A collection of frequently used, battle-tested React Hooks to enhance your component logic.
 5.  **Zustand State Management**: A small, fast, and scalable state management solution for React.
-6.  **Pre-configured Axios**: Ready-to-use setup for making HTTP requests.
 
 ---
 
 ## ✨ Vue 3 Development Template
 
-This template builds upon the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) starter, supercharging it with:
+Based on the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) starter, supercharging it with:
 
 1.  **Auto Imports**: Say goodbye to manual imports! Automatically import APIs and components for a smoother coding experience.
 2.  **Unocss + Iconify**: A powerful combination for styling and flexible icon management.
-3.  **Local Icon Sprites**: Efficiently manage and display your custom SVG icons with a pre-configured sprite component.
-4.  **Motion for Animations**: Easily craft stunning animations and transitions with the intuitive Motion library.
+3.  **Pre-configured Axios**: Get started with robust HTTP requests right out of the box.
+4.  **vueuse**: A collection of frequently used, battle-tested Vue Hooks to enhance your component logic.
 5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
-6.  **Pre-configured Axios**: Get started with robust HTTP requests right out of the box.
 
 ---
 
