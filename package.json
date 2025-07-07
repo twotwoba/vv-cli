@@ -1,6 +1,6 @@
 {
     "name": "@twotwoba/vv-cli",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "description": "Your Vite-powered starter for React19 and Vue3",
     "type": "module",
     "bin": {
