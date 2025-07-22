@@ -1,7 +1,8 @@
-import { FetchError, resolveError } from './server-helper'
-import { ServiceEnum } from './server-enum'
-import { BareFetcher } from 'swr'
 import { AUTH_KEY } from '@/lib/storage-keys'
+import { FetchError, processData, resolveError } from './server-helper'
+import { BareFetcher } from 'swr'
+import useSWR, { BareFetcher } from 'swr'
+import useSWRMutation from 'swr/mutation'
 
 const defaultHeaders: HeadersInit = {
     'Content-Type': 'application/json'
@@ -40,27 +41,103 @@ export const fetcher = async (url: string, options: RequestInit = {}): Promise<a
         const msg = resolveError(response.status)
         throw new FetchError('Fetch failed', response.status, { url, options, msg })
     }
-    return response.json()
+    const res = await response.json()
+    return processData(res)
 }
 
 /**
  * @description        创建自定义 Fetch 实例
  * @param {string}     baseURL  基础 URL
- * @param {string}     gateway  网关
  * @param {string}     method   请求方法
  * @returns {Function} 返回一个自定义 Fetch 函数
  */
 export const createFetcher = (
     baseURL: string,
-    gateway?: string,
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
 ): BareFetcher<any> => {
-    return async (endpoint: string, options: RequestInit = {}) => {
-        const url = new URL(endpoint, baseURL + (gateway || '')).toString()
+     return async (endpoint: string, options: RequestInit = {}) => {
+        // 处理本地代理和线上环境的URL
+        let url: string
+        if (baseURL.startsWith('http://') || baseURL.startsWith('https://')) {
+            url = new URL(endpoint, baseURL).toString()
+        } else {
+            url = baseURL.endsWith('/')
+                ? baseURL + endpoint.replace(/^\//, '')
+                : baseURL + (endpoint.startsWith('/') ? endpoint : '/' + endpoint)
+        }
         return fetcher(url, { ...options, method })
     }
 }
 
-// ManageFetcher 请求实例
-export const ManageFetcher = createFetcher(import.meta.env.VITE_API_URL, ServiceEnum.MANAGE)
-export const ManageFetcherPost = createFetcher(import.meta.env.VITE_API_URL, ServiceEnum.MANAGE, 'POST')
+
+//  请求实例
+const GetFetcher = createFetcher(import.meta.env.VITE_API_URL, 'GET')
+const PostFetcher = createFetcher(import.meta.env.VITE_API_URL, 'POST')
+const PutFetcher = createFetcher(import.meta.env.VITE_API_URL, 'PUT')
+const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, 'DELETE')
+
+/**
+ * @param endpoint API
+ * @template T 请求返回的数据类型
+ * @description 创建一个查询 hook，使用 SWR 进行数据获取
+ * @example
+ * const useUser = createQuery<User>('/api/user')
+ */
+export const createQuery = <T = any>(endpoint: string) => {
+    if (!endpoint) {
+        throw new Error('Endpoint is required for query')
+    }
+
+    return (options?: { enabled?: boolean; refreshInterval?: number; revalidateOnFocus?: boolean }) => {
+        const shouldFetch = options?.enabled !== false
+
+        const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
+            shouldFetch ? endpoint : null,
+            GetFetcher,
+            options
+        )
+
+        return {
+            data,
+            error,
+            isLoading,
+            isValidating,
+            mutate,
+            isError: !!error,
+            isSuccess: !error && !isLoading && data !== undefined
+        }
+    }
+}
+
+/**
+ * @param endpoint API
+ * @template T 请求发送的数据类型
+ * @description 创建一个变更函数，使用 SWR Mutation 进行数据提交
+ * @example
+ * const useCreateUser = createMutation<User>('/api/user', 'POST')
+ */
+export const createMutation = <T>(endpoint: string, method?: 'POST' | 'PUT' | 'DELETE') => {
+    if (!endpoint) {
+        throw new Error('Endpoint is required for mutation')
+    }
+    let fetcher: BareFetcher<T>
+    switch (method) {
+        case 'POST':
+            fetcher = PostFetcher
+            break
+        case 'PUT':
+            fetcher = PutFetcher
+            break
+        case 'DELETE':
+            fetcher = DeleteFetcher
+            break
+        default:
+            fetcher = PostFetcher
+    }
+    return () => {
+        const { data, error, isMutating, trigger, reset } = useSWRMutation(endpoint, (url, { arg }: { arg: T }) =>
+            fetcher(url, { body: JSON.stringify(arg) })
+        )
+        return { data, error, isMutating, trigger, reset }
+    }
+}

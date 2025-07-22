@@ -1,5 +1,4 @@
 import { SWRConfig } from 'swr'
-import { ManageFetcher } from './service'
 import { useNavigate } from 'react-router'
 
 function App() {
@@ -12,8 +11,6 @@ function App() {
                     errorRetryInterval: 1000,
                     revalidateOnFocus: false,
                     revalidateOnReconnect: true,
-
-                    fetcher: ManageFetcher,
                     onError: (error, key) => {
                         if (error.status === 401) {
                             localStorage.removeItem('auth_token')

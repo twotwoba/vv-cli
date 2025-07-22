@@ -48,3 +48,18 @@ export function resolveError(code: number): string {
     }
     return message
 }
+
+/**
+ * 处理请求返回数据
+ * @param data
+ * @returns
+ */
+export function processData(data: any) {
+    /* custom your data processing logic here  */
+    if (data?.code < 300) {
+        return data?.data
+    } else {
+        resolveError(data?.code)
+        throw new FetchError(data?.message || '请求失败', data?.code, data)
+    }
+}
