@@ -1,7 +1,7 @@
 import { AUTH_KEY } from '@/lib/storage-keys'
 import { FetchError, processData, resolveError } from './server-helper'
 import { BareFetcher } from 'swr'
-import useSWR, { BareFetcher } from 'swr'
+import useSWR, { BareFetcher, SWRConfiguration } from 'swr'
 import useSWRMutation from 'swr/mutation'
 
 const defaultHeaders: HeadersInit = {
@@ -83,16 +83,16 @@ const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, 'DELETE')
  * @example
  * const useUser = createQuery<User>('/api/user')
  */
-export const createQuery = <T = any>(endpoint: string) => {
+export const createQuery = <T = any,P = any>(endpoint: string) => {
     if (!endpoint) {
         throw new Error('Endpoint is required for query')
     }
 
-    return (options?: { enabled?: boolean; refreshInterval?: number; revalidateOnFocus?: boolean }) => {
+    return (options?: { enabled?: boolean; params?: P } & SWRConfiguration) => {
         const shouldFetch = options?.enabled !== false
 
         const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
-            shouldFetch ? endpoint : null,
+            shouldFetch ? [endpoint, options?.params] : null,
             GetFetcher,
             options
         )
