@@ -102,8 +102,8 @@ const PutFetcher = createFetcher(import.meta.env.VITE_API_URL, "PUT")
 const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, "DELETE")
 
 /**
- * @param endpoint API
- * @template T 请求返回的数据类型
+ * @param       endpoint API
+ * @template    T 请求返回的数据类型
  * @description 创建一个查询 hook，使用 SWR 进行数据获取
  * @example
  * const useUser = createQuery<User>('/api/user')
@@ -135,8 +135,8 @@ export const createQuery = <T = any, P = any>(endpoint: string) => {
 }
 
 /**
- * @param endpoint API
- * @template T 请求发送的数据类型
+ * @param       endpoint API
+ * @template    T 请求发送的数据类型
  * @description 创建一个变更函数，使用 SWR Mutation 进行数据提交
  * @example
  * const useCreateUser = createMutation<User>('/api/user', 'POST')

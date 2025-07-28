@@ -27,6 +27,7 @@
 3.  **SWR + fetcher**: 一个轻量级的数据获取、缓存和重新验证库，配和原生 fetch，开发体验拉满。
 4.  **useHooks**: 一系列常用且经过实践检验的 React Hooks，增强您的组件逻辑。
 5.  **Zustand 状态管理**: 一个小巧、快速且可扩展的 React 状态管理方案。
+6.  **Biome**：替代eslint&prettier，更流畅的开发体验。
 
 ---
 
