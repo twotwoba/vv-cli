@@ -1,48 +1,60 @@
-import { AUTH_KEY } from '@/lib/storage-keys'
-import { FetchError, processData, resolveError } from './server-helper'
-import { BareFetcher } from 'swr'
-import useSWR, { BareFetcher, SWRConfiguration } from 'swr'
-import useSWRMutation from 'swr/mutation'
+import useSWR, { type BareFetcher, type SWRConfiguration } from "swr"
+import useSWRMutation from "swr/mutation"
+import { AUTH_KEY } from "@/lib/global-keys"
+import { filterObjNull } from "@/lib/utils"
+import { getAuthToken, isPublicApi } from "@/service/auth"
+import { FetchError, processData, resolveError } from "./server-helper"
 
 const defaultHeaders: HeadersInit = {
-    'Content-Type': 'application/json'
+	"Content-Type": "application/json",
 }
 /**
  * @description            全局 Fetcher 函数
  * @returns {Promise<any>} 返回一个 Promise，解析为响应数据
  */
 export const fetcher = async (url: string, options: RequestInit = {}): Promise<any> => {
-    if (!url) {
-        throw new FetchError('URL is required', 400)
-    }
-    if (typeof url !== 'string') {
-        throw new FetchError('URL must be a string', 400)
-    }
+	if (!url) {
+		throw new FetchError("URL is required", 400)
+	}
+	if (typeof url !== "string") {
+		throw new FetchError("URL must be a string", 400)
+	}
 
-    const token = localStorage.getItem(AUTH_KEY) || ''
-    if (token && !(options.headers && (options.headers as Record<string, string>)['Authorization'])) {
-        defaultHeaders[AUTH_KEY] = token
-    }
+	const token = getAuthToken()
 
-    if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
-        options.body = JSON.stringify(options.body)
-    }
+	// 检查URL是否是 PASS 开头的接口（登录、注册等不需要认证的接口）
+	if (
+		token &&
+		!isPublicApi(url) &&
+		!(options.headers && (options.headers as Record<string, string>)[AUTH_KEY])
+	) {
+		defaultHeaders[AUTH_KEY] = token
+	}
 
-    const finalOptions = {
-        ...options,
-        headers: {
-            ...defaultHeaders,
-            ...(options.headers || {})
-        }
-    }
+	if (options.body && typeof options.body === "object" && !(options.body instanceof FormData)) {
+		options.body = JSON.stringify(options.body)
+	}
 
-    const response = await fetch(url, finalOptions)
-    if (!response.ok) {
-        const msg = resolveError(response.status)
-        throw new FetchError('Fetch failed', response.status, { url, options, msg })
-    }
-    const res = await response.json()
-    return processData(res)
+	const finalOptions = {
+		...options,
+		headers: {
+			...defaultHeaders,
+			...(options.headers || {}),
+		},
+	}
+
+	const response = await fetch(url, finalOptions)
+	// console.log('======response log=====>', response)
+	if (!response.ok) {
+		const msg = resolveError(response.status)
+		throw new FetchError("SWR Fetch failed", response.status, {
+			url,
+			options,
+			msg,
+		})
+	}
+	const res = await response.json()
+	return processData(res)
 }
 
 /**
@@ -52,29 +64,42 @@ export const fetcher = async (url: string, options: RequestInit = {}): Promise<a
  * @returns {Function} 返回一个自定义 Fetch 函数
  */
 export const createFetcher = (
-    baseURL: string,
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+	baseURL: string,
+	method?: "GET" | "POST" | "PUT" | "DELETE",
 ): BareFetcher<any> => {
-     return async (endpoint: string, options: RequestInit = {}) => {
-        // 处理本地代理和线上环境的URL
-        let url: string
-        if (baseURL.startsWith('http://') || baseURL.startsWith('https://')) {
-            url = new URL(endpoint, baseURL).toString()
-        } else {
-            url = baseURL.endsWith('/')
-                ? baseURL + endpoint.replace(/^\//, '')
-                : baseURL + (endpoint.startsWith('/') ? endpoint : '/' + endpoint)
-        }
-        return fetcher(url, { ...options, method })
-    }
+	return async (endpoint: string | [string, any], options: RequestInit = {}) => {
+		// 处理本地代理和线上环境的URL
+		let url: string
+		let midEndpoint: string
+		let params = null
+		if (Array.isArray(endpoint)) {
+			midEndpoint = endpoint[0]
+			params = endpoint[1]
+			params = filterObjNull(endpoint[1] || "") // 处理参数
+		} else {
+			midEndpoint = endpoint
+		}
+		if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
+			url = new URL(midEndpoint, baseURL).toString()
+		} else {
+			url = baseURL.endsWith("/")
+				? baseURL + midEndpoint.replace(/^\//, "")
+				: baseURL + (midEndpoint.startsWith("/") ? midEndpoint : `/${midEndpoint}`)
+		}
+
+		if (params) {
+			// biome-ignore lint/style/useTemplate: <string concatenation is clearer here>
+			url = url + "?" + new URLSearchParams(params).toString()
+		}
+		return fetcher(url, { ...options, method })
+	}
 }
 
-
 //  请求实例
-const GetFetcher = createFetcher(import.meta.env.VITE_API_URL, 'GET')
-const PostFetcher = createFetcher(import.meta.env.VITE_API_URL, 'POST')
-const PutFetcher = createFetcher(import.meta.env.VITE_API_URL, 'PUT')
-const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, 'DELETE')
+const GetFetcher = createFetcher(import.meta.env.VITE_API_URL, "GET")
+const PostFetcher = createFetcher(import.meta.env.VITE_API_URL, "POST")
+const PutFetcher = createFetcher(import.meta.env.VITE_API_URL, "PUT")
+const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, "DELETE")
 
 /**
  * @param endpoint API
@@ -83,30 +108,30 @@ const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, 'DELETE')
  * @example
  * const useUser = createQuery<User>('/api/user')
  */
-export const createQuery = <T = any,P = any>(endpoint: string) => {
-    if (!endpoint) {
-        throw new Error('Endpoint is required for query')
-    }
+export const createQuery = <T = any, P = any>(endpoint: string) => {
+	if (!endpoint) {
+		throw new Error("Endpoint is required for query")
+	}
 
-    return (options?: { enabled?: boolean; params?: P } & SWRConfiguration) => {
-        const shouldFetch = options?.enabled !== false
+	return (options?: { enabled?: boolean; params?: P } & SWRConfiguration) => {
+		const shouldFetch = options?.enabled !== false
 
-        const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
-            shouldFetch ? [endpoint, options?.params] : null,
-            GetFetcher,
-            options
-        )
+		const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
+			shouldFetch ? [endpoint, options?.params] : null,
+			GetFetcher,
+			options,
+		)
 
-        return {
-            data,
-            error,
-            isLoading,
-            isValidating,
-            mutate,
-            isError: !!error,
-            isSuccess: !error && !isLoading && data !== undefined
-        }
-    }
+		return {
+			data,
+			error,
+			isLoading,
+			isValidating,
+			mutate,
+			isError: !!error,
+			isSuccess: !error && !isLoading && data !== undefined,
+		}
+	}
 }
 
 /**
@@ -116,28 +141,29 @@ export const createQuery = <T = any,P = any>(endpoint: string) => {
  * @example
  * const useCreateUser = createMutation<User>('/api/user', 'POST')
  */
-export const createMutation = <T>(endpoint: string, method?: 'POST' | 'PUT' | 'DELETE') => {
-    if (!endpoint) {
-        throw new Error('Endpoint is required for mutation')
-    }
-    let fetcher: BareFetcher<T>
-    switch (method) {
-        case 'POST':
-            fetcher = PostFetcher
-            break
-        case 'PUT':
-            fetcher = PutFetcher
-            break
-        case 'DELETE':
-            fetcher = DeleteFetcher
-            break
-        default:
-            fetcher = PostFetcher
-    }
-    return () => {
-        const { data, error, isMutating, trigger, reset } = useSWRMutation(endpoint, (url, { arg }: { arg: T }) =>
-            fetcher(url, { body: JSON.stringify(arg) })
-        )
-        return { data, error, isMutating, trigger, reset }
-    }
+export const createMutation = <T>(endpoint: string, method?: "POST" | "PUT" | "DELETE") => {
+	if (!endpoint) {
+		throw new Error("Endpoint is required for mutation")
+	}
+	let fetcher: BareFetcher<T>
+	switch (method) {
+		case "POST":
+			fetcher = PostFetcher
+			break
+		case "PUT":
+			fetcher = PutFetcher
+			break
+		case "DELETE":
+			fetcher = DeleteFetcher
+			break
+		default:
+			fetcher = PostFetcher
+	}
+	return () => {
+		const { data, error, isMutating, trigger, reset } = useSWRMutation(
+			endpoint,
+			(url, { arg }: { arg: T }) => fetcher(url, { body: JSON.stringify(arg) }),
+		)
+		return { data, error, isMutating, trigger, reset }
+	}
 }

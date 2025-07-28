@@ -1,4 +1,4 @@
-import { AUTH_KEY } from '@/lib/storage-keys'
+import { clearAuthToken } from "./auth"
 
 /**
  * @description              自定义全局 FetchError
@@ -10,15 +10,15 @@ import { AUTH_KEY } from '@/lib/storage-keys'
  * const error = new FetchError('Not Found', 404, { resource: 'User' })
  */
 export class FetchError extends Error {
-    status: number
-    info: any
+	status: number
+	info: any
 
-    constructor(message: string, status: number, info?: any) {
-        super(message)
-        this.name = 'FetchError'
-        this.status = status
-        this.info = info
-    }
+	constructor(message: string, status: number, info?: any) {
+		super(message)
+		this.name = "FetchError"
+		this.status = status
+		this.info = info
+	}
 }
 
 /**
@@ -27,26 +27,26 @@ export class FetchError extends Error {
  * @returns {string} 错误信息
  */
 export function resolveError(code: number): string {
-    let message: string | undefined
-    switch (code) {
-        case 401:
-            message = '登录已过期，请重新登录'
-            localStorage.removeItem(AUTH_KEY)
-            break
-        case 403:
-            message = '请求被拒绝'
-            break
-        case 404:
-            message = '请求资源或接口不存在'
-            break
-        case 500:
-            message = '服务器发生异常'
-            break
-        default:
-            message = `【${code}】: 未知异常!`
-            break
-    }
-    return message
+	let message: string | undefined
+	switch (code) {
+		case 401:
+			message = "登录已过期，请重新登录"
+			clearAuthToken()
+			break
+		case 403:
+			message = "请求被拒绝"
+			break
+		case 404:
+			message = "请求资源或接口不存在"
+			break
+		case 500:
+			message = "服务器发生异常"
+			break
+		default:
+			message = `【${code}】: 未知异常!`
+			break
+	}
+	return message
 }
 
 /**
@@ -55,11 +55,10 @@ export function resolveError(code: number): string {
  * @returns
  */
 export function processData(data: any) {
-    /* custom your data processing logic here  */
-    if (data?.code < 300) {
-        return data?.data
-    } else {
-        resolveError(data?.code)
-        throw new FetchError(data?.message || '请求失败', data?.code, data)
-    }
+	if (data?.code < 300) {
+		return data?.data
+	} else {
+		// 报错(data?.message || resolveError(data?.code))
+		throw new FetchError(data?.message || "请求失败", data?.code, data)
+	}
 }
