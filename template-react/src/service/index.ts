@@ -104,6 +104,7 @@ const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, "DELETE")
 /**
  * @param       endpoint API
  * @template    T 请求返回的数据类型
+ * @template    P 请求查询参数的数据类型
  * @description 创建一个查询 hook，使用 SWR 进行数据获取
  * @example
  * const useUser = createQuery<User>('/api/user')
