@@ -1,5 +1,9 @@
 import useSWR, { type BareFetcher, type SWRConfiguration } from "swr"
 import useSWRMutation from "swr/mutation"
+import useSWRInfinite, {
+	type SWRInfiniteConfiguration,
+	type SWRInfiniteKeyLoader,
+} from "swr/infinite"
 import { AUTH_KEY } from "@/lib/global-keys"
 import { filterObjNull } from "@/lib/utils"
 import { getAuthToken, isPublicApi } from "@/service/auth"
@@ -166,5 +170,57 @@ export const createMutation = <T>(endpoint: string, method?: "POST" | "PUT" | "D
 			(url, { arg }: { arg: T }) => fetcher(url, { body: JSON.stringify(arg) }),
 		)
 		return { data, error, isMutating, trigger, reset }
+	}
+}
+
+
+/**
+ * @param endpoint API
+ * @template T 请求返回的数据类型
+ * @template P 请求查询参数的数据类型
+ * @description 创建一个无限查询 hook，使用 SWR Infinite 进行数据获取
+ * @example
+ * const useUserList = createInfiniteQuery<User>('/api/user')
+ */
+export const createInfiniteQuery = <T = any, P = any>(endpoint: string) => {
+	if (!endpoint) {
+		throw new Error("Endpoint is required for infinite query")
+	}
+
+	return (
+		options?: {
+			enabled?: boolean
+			params?: P
+			getKey?: SWRInfiniteKeyLoader<T, any>
+		} & SWRInfiniteConfiguration<T>,
+	) => {
+		const shouldFetch = options?.enabled !== false
+
+		const getKeyFunction = (pageIndex: number, previousPageData: T | null) => {
+			// 外部自定义 getKey 函数
+			if (options?.getKey) {
+				return options.getKey(pageIndex, previousPageData)
+			}
+
+			return [endpoint, { ...options?.params, current: pageIndex + 1 }]
+		}
+
+		const { data, error, isLoading, mutate, isValidating, size, setSize } = useSWRInfinite<T>(
+			shouldFetch ? getKeyFunction : () => null,
+			GetFetcher,
+			options,
+		)
+
+		return {
+			data,
+			error,
+			isLoading,
+			isValidating,
+			mutate,
+			isError: !!error,
+			isSuccess: !error && !isLoading && data !== undefined,
+			size,
+			setSize,
+		}
 	}
 }
