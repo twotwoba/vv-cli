@@ -1,7 +1,7 @@
 {
     "name": "@twotwoba/vv-cli",
     "version": "2.1.10",
-    "description": "Your Vite-powered starter for React19 and Vue3",
+    "description": "Easily create Vite + React/Vue3 project with TailwindCSS and other useful libraries. Also support Chrome extension.",
     "type": "module",
     "bin": {
         "vv": "./bin/index.js"
@@ -9,11 +9,9 @@
     "files": [
         "bin",
         "template-react",
-        "template-vue"
+        "template-vue",
+        "template-extension"
     ],
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "keywords": [
         "cli",
         "vite",
@@ -26,7 +24,9 @@
         "usehooks",
         "vue3",
         "naive-ui",
-        "unocss"
+        "unocss",
+        "chrome",
+        "extension"
     ],
     "author": "eric.yuan",
     "license": "MIT",
