@@ -1,16 +1,16 @@
 import useSWR, { type BareFetcher, type SWRConfiguration } from "swr"
-import useSWRMutation from "swr/mutation"
 import useSWRInfinite, {
 	type SWRInfiniteConfiguration,
-	type SWRInfiniteKeyLoader,
+	type SWRInfiniteKeyLoader
 } from "swr/infinite"
+import useSWRMutation from "swr/mutation"
 import { AUTH_KEY } from "@/lib/global-keys"
 import { filterObjNull } from "@/lib/utils"
 import { getAuthToken, isPublicApi } from "@/service/auth"
 import { FetchError, processData, resolveError } from "./server-helper"
 
 const defaultHeaders: HeadersInit = {
-	"Content-Type": "application/json",
+	"Content-Type": "application/json"
 }
 /**
  * @description            全局 Fetcher 函数
@@ -43,8 +43,8 @@ export const fetcher = async (url: string, options: RequestInit = {}): Promise<a
 		...options,
 		headers: {
 			...defaultHeaders,
-			...(options.headers || {}),
-		},
+			...(options.headers || {})
+		}
 	}
 
 	const response = await fetch(url, finalOptions)
@@ -54,7 +54,7 @@ export const fetcher = async (url: string, options: RequestInit = {}): Promise<a
 		throw new FetchError("SWR Fetch failed", response.status, {
 			url,
 			options,
-			msg,
+			msg
 		})
 	}
 	const res = await response.json()
@@ -69,7 +69,7 @@ export const fetcher = async (url: string, options: RequestInit = {}): Promise<a
  */
 export const createFetcher = (
 	baseURL: string,
-	method?: "GET" | "POST" | "PUT" | "DELETE",
+	method?: "GET" | "POST" | "PUT" | "DELETE"
 ): BareFetcher<any> => {
 	return async (endpoint: string | [string, any], options: RequestInit = {}) => {
 		// 处理本地代理和线上环境的URL
@@ -83,7 +83,12 @@ export const createFetcher = (
 		} else {
 			midEndpoint = endpoint
 		}
+
 		if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
+			const pathname = new URL(baseURL).pathname
+			if (pathname && pathname !== "/" && !midEndpoint.startsWith(pathname)) {
+				midEndpoint = pathname + (midEndpoint.startsWith("/") ? midEndpoint : `/${midEndpoint}`)
+			}
 			url = new URL(midEndpoint, baseURL).toString()
 		} else {
 			url = baseURL.endsWith("/")
@@ -91,9 +96,16 @@ export const createFetcher = (
 				: baseURL + (midEndpoint.startsWith("/") ? midEndpoint : `/${midEndpoint}`)
 		}
 
+		// 根据请求方法决定参数传递方式
+		const finalOptions = { ...options, method }
 		if (params) {
-			// biome-ignore lint/style/useTemplate: <string concatenation is clearer here>
-			url = url + "?" + new URLSearchParams(params).toString()
+			if (method === "GET" || method === "DELETE") {
+				// GET/DELETE 请求使用查询参数
+				// biome-ignore lint/style/useTemplate: <string concatenation is clearer here>
+				url = url + "?" + new URLSearchParams(params).toString()
+			} else if (method === "POST" || method === "PUT") {
+				finalOptions.body = params as any
+			}
 		}
 		return fetcher(url, { ...options, method })
 	}
@@ -124,7 +136,7 @@ export const createQuery = <T = any, P = any>(endpoint: string) => {
 		const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
 			shouldFetch ? [endpoint, options?.params] : null,
 			GetFetcher,
-			options,
+			options
 		)
 
 		return {
@@ -134,7 +146,7 @@ export const createQuery = <T = any, P = any>(endpoint: string) => {
 			isValidating,
 			mutate,
 			isError: !!error,
-			isSuccess: !error && !isLoading && data !== undefined,
+			isSuccess: !error && !isLoading && data !== undefined
 		}
 	}
 }
@@ -167,12 +179,11 @@ export const createMutation = <T>(endpoint: string, method?: "POST" | "PUT" | "D
 	return () => {
 		const { data, error, isMutating, trigger, reset } = useSWRMutation(
 			endpoint,
-			(url, { arg }: { arg: T }) => fetcher(url, { body: JSON.stringify(arg) }),
+			(url, { arg }: { arg: T }) => fetcher(url, { body: JSON.stringify(arg) })
 		)
 		return { data, error, isMutating, trigger, reset }
 	}
 }
-
 
 /**
  * @param endpoint API
@@ -192,7 +203,7 @@ export const createInfiniteQuery = <T = any, P = any>(endpoint: string) => {
 			enabled?: boolean
 			params?: P
 			getKey?: SWRInfiniteKeyLoader<T, any>
-		} & SWRInfiniteConfiguration<T>,
+		} & SWRInfiniteConfiguration<T>
 	) => {
 		const shouldFetch = options?.enabled !== false
 
@@ -208,7 +219,7 @@ export const createInfiniteQuery = <T = any, P = any>(endpoint: string) => {
 		const { data, error, isLoading, mutate, isValidating, size, setSize } = useSWRInfinite<T>(
 			shouldFetch ? getKeyFunction : () => null,
 			GetFetcher,
-			options,
+			options
 		)
 
 		return {
@@ -220,7 +231,7 @@ export const createInfiniteQuery = <T = any, P = any>(endpoint: string) => {
 			isError: !!error,
 			isSuccess: !error && !isLoading && data !== undefined,
 			size,
-			setSize,
+			setSize
 		}
 	}
 }
