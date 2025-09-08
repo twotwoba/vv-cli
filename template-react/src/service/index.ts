@@ -4,9 +4,9 @@ import useSWRInfinite, {
 	type SWRInfiniteKeyLoader
 } from "swr/infinite"
 import useSWRMutation from "swr/mutation"
+import { getAuthToken, isPublicApi } from "@/lib/auth"
 import { AUTH_KEY } from "@/lib/global-keys"
 import { filterObjNull } from "@/lib/utils"
-import { getAuthToken, isPublicApi } from "@/service/auth"
 import { FetchError, processData, resolveError } from "./server-helper"
 
 const defaultHeaders: HeadersInit = {

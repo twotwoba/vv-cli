@@ -6,7 +6,7 @@ import { lazy, Suspense } from "react"
 const loadPage = (
 	importFn: () => Promise<{
 		default: React.ComponentType<any>
-	}>,
+	}>
 ) => {
 	const LazyComponent = lazy(importFn)
 

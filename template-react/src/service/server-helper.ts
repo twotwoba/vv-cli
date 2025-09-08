@@ -1,4 +1,4 @@
-import { clearAuthToken } from "./auth"
+import { clearAuthToken } from "../lib/auth"
 
 /**
  * @description              自定义全局 FetchError

@@ -1,7 +1,7 @@
 /**
  * 身份验证相关工具函数
  */
-import { AUTH_KEY } from "@/lib/global-keys"
+import { AUTH_KEY } from "./global-keys"
 
 /**
  * 检查是否为需要跳过认证的接口

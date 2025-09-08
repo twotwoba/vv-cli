@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
 import { SWRConfig } from "swr"
-import { clearAuthToken } from "./service/auth"
+import { clearAuthToken } from "./lib/auth"
 
 function App() {
 	const navigate = useNavigate()
@@ -18,7 +18,7 @@ function App() {
 							navigate("/login")
 							console.error("Unauthorized access detected. Redirecting to login page.", error, key)
 						}
-					},
+					}
 				}}
 			>
 				<div className="flex h-full w-full items-center justify-center bg-gray-300">
