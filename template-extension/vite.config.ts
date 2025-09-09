@@ -6,6 +6,7 @@ import zip from "vite-plugin-zip-pack"
 import tsconfigPaths from "vite-tsconfig-paths"
 import manifest from "./manifest.config.js"
 import { name, version } from "./package.json"
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
 	const isProd = mode === "production"
@@ -26,7 +27,6 @@ export default defineConfig(({ mode }) => {
 				input: {
 					main: "index.html",
 					option: "option.html"
-					// action: "src/core/action.ts"
 				},
 				output: {
 					manualChunks(id) {
