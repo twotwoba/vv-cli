@@ -10,7 +10,8 @@
         "bin",
         "template-react",
         "template-vue",
-        "template-extension"
+        "template-extension",
+        "!**/node_modules/**"
     ],
     "keywords": [
         "cli",
