@@ -1,8 +1,8 @@
 简体中文 | [English](README.md)
 
-# 🚀 React 或 Vue 开发模板
+# 🚀 React、Vue 与 Chrome 扩展开发模板
 
-通过这些精心打造、功能丰富的 Vue 3 和 React 19 模板来简化您的开发工作流程，它们都由 Vite 5+ 提供支持。每个模板都经过精心配置，旨在为您提供一致且现代的开发体验。
+通过这些精心打造、功能丰富的 Vue 3、React 19 和 Chrome 扩展模板来简化您的开发工作流程，它们都由 Vite 5+ 提供支持。每个模板都经过精心配置，旨在为您提供一致且现代的开发体验。
 
 ---
 
@@ -40,6 +40,19 @@
 3.  **预配置 Axios**: 开箱即用，轻松发起健壮的 HTTP 请求。
 4.  **vueuse**: 一系列常用的 vue hooks，增强您的组件逻辑。
 5.  **Pinia 状态管理**: 适用于 Vue 的简单、直观且类型安全的状态管理方案。
+
+---
+
+## 🧩 Chrome 扩展开发模板
+
+一个使用 React 19、TypeScript 和 Manifest V3 构建的现代 Chrome 扩展模板：
+
+1. **React 19 + TypeScript**: 最新的 React 版本，为扩展开发提供完整的类型安全。
+2. **Manifest V3**: 基于最新的 Chrome 扩展标准，使用 Service Worker 构建。
+3. **CRXJS + Vite**: 为扩展提供无缝的开发体验和热重载功能。
+4. **TailwindCSS + Radix UI**: 为弹窗和选项页面提供美观、易用的 UI 组件。
+5. **多环境支持**: 弹窗、选项页、内容脚本和后台脚本。
+6. **Shadow DOM 集成**: 为内容脚本组件提供隔离的样式。
 
 ---
 

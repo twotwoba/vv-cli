@@ -1,8 +1,8 @@
 [简体中文](README.zh-CN.md) | English
 
-# 🚀 React or Vue Development Templates
+# 🚀 React, Vue & Chrome Extension Development Templates
 
-Streamline your development workflow with these opinionated, feature-rich templates for Vue 3 and React 19, powered by Vite 5+. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
+Streamline your development workflow with these opinionated, feature-rich templates for Vue 3, React 19, and Chrome Extensions, powered by Vite 5+. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
 
 ---
 
@@ -40,6 +40,19 @@ Based on the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages
 3.  **Pre-configured Axios**: Get started with robust HTTP requests right out of the box.
 4.  **vueuse**: A collection of frequently used, battle-tested Vue Hooks to enhance your component logic.
 5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
+
+---
+
+## 🧩 Chrome Extension Development Template
+
+A modern Chrome Extension template built with React 19, TypeScript, and Manifest V3:
+
+1. **React 19 + TypeScript**: Latest React with full type safety for extension development.
+2. **Manifest V3**: Built for the latest Chrome extension standards with service workers.
+3. **CRXJS + Vite**: Seamless development experience with hot reload for extensions.
+4. **TailwindCSS + Radix UI**: Beautiful, accessible UI components for popup and options pages.
+5. **Multi-environment Support**: Popup, options page content scripts, and background scripts.
+6. **Shadow DOM Integration**: Isolated styling for content script components.
 
 ---
 
