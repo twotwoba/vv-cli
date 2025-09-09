@@ -94,7 +94,6 @@ src/
 - [Vite](https://vitejs.dev/) - Build tool
 - [TailwindCSS](https://tailwindcss.com/) - CSS framework
 - [CRXJS](https://crxjs.dev/vite-plugin) - Chrome extension Vite plugin
-- [Radix UI](https://www.radix-ui.com/) - Headless UI components
 
 ## Extension Features
 
