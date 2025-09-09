@@ -62,7 +62,7 @@
 
 ```bash
 # 全局安装 CLI
-pnpm i @twotwoba/vv-cli -g
+nnpm i @twotwoba/vv-cli -g
 
 # 创建新项目
 vv <youer-project-name>

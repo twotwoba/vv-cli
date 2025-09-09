@@ -62,7 +62,7 @@ It's incredibly easy to spin up a new project with these templates:
 
 ```bash
 # Install the CLI globally
-pnpm i @twotwoba/vv-cli -g
+npm i @twotwoba/vv-cli -g
 
 # Create a new project
 vv <your-project-name>
