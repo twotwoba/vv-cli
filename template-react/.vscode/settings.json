@@ -6,8 +6,7 @@
         "source.fixAll.biome": "explicit"
     },
     "tailwindCSS.experimental.classRegex": [
-        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-        ["\\/\\* tw \\*\\/\\s+`([^`]*)"]
+        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
     ],
     "files.associations": {
         "*.css": "tailwindcss",

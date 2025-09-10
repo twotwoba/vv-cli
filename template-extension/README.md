@@ -85,7 +85,6 @@ src/
 - **Options**: Extension options/settings page
 - **Content Script**: Injected into web pages
 - **Background**: Service worker for background tasks
-- **Shadow DOM**: Isolated components for content scripts
 
 ## Tech Stack
 
