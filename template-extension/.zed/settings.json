@@ -5,6 +5,14 @@
             "settings": {
                 "require_config_file": true
             }
+        },
+        "tailwindcss-language-server": {
+            "settings": {
+                "classFunctions": ["cva", "clsx"],
+                "experimental": {
+                    "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"]
+                }
+            }
         }
     },
     "languages": {
