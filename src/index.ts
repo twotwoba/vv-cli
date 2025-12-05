@@ -69,7 +69,7 @@ function validateProjectName(name: string): true | string {
 /**
  * Main CLI action
  */
-async function createProject(projectName?: string): Promise<void> {
+async function createProject(projectName?: string, options?: { template?: string }): Promise<void> {
     try {
         // If project name is not provided, ask for it
         if (!projectName) {
@@ -91,15 +91,28 @@ async function createProject(projectName?: string): Promise<void> {
             }
         }
 
-        // Ask for template type
-        const { template } = await inquirer.prompt<{ template: TemplateType }>([
-            {
-                type: "list",
-                name: "template",
-                message: "Select a template:",
-                choices: templateChoices
+        let template: TemplateType
+
+        // Check if template is provided via CLI option
+        if (options?.template) {
+            const validTemplates: TemplateType[] = ["vue", "react", "extension"]
+            if (!validTemplates.includes(options.template as TemplateType)) {
+                console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`))
+                process.exit(1)
             }
-        ])
+            template = options.template as TemplateType
+        } else {
+            // Ask for template type interactively
+            const answer = await inquirer.prompt<{ template: TemplateType }>([
+                {
+                    type: "list",
+                    name: "template",
+                    message: "Select a template:",
+                    choices: templateChoices
+                }
+            ])
+            template = answer.template
+        }
 
         const templatePath = templatePaths[template]
         const targetPath = path.resolve(process.cwd(), projectName)
@@ -178,6 +191,7 @@ program
 
 program
     .argument("[project-name]", "Name of the project")
+    .option("-t, --template <template>", "Template to use (vue, react, extension)")
     .action(createProject)
 
 program.parse()

@@ -48,7 +48,7 @@ function validateProjectName(name) {
 /**
  * Main CLI action
  */
-async function createProject(projectName) {
+async function createProject(projectName, options) {
     try {
         // If project name is not provided, ask for it
         if (!projectName) {
@@ -70,15 +70,28 @@ async function createProject(projectName) {
                 process.exit(1);
             }
         }
-        // Ask for template type
-        const { template } = await inquirer.prompt([
-            {
-                type: "list",
-                name: "template",
-                message: "Select a template:",
-                choices: templateChoices
+        let template;
+        // Check if template is provided via CLI option
+        if (options?.template) {
+            const validTemplates = ["vue", "react", "extension"];
+            if (!validTemplates.includes(options.template)) {
+                console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`));
+                process.exit(1);
             }
-        ]);
+            template = options.template;
+        }
+        else {
+            // Ask for template type interactively
+            const answer = await inquirer.prompt([
+                {
+                    type: "list",
+                    name: "template",
+                    message: "Select a template:",
+                    choices: templateChoices
+                }
+            ]);
+            template = answer.template;
+        }
         const templatePath = templatePaths[template];
         const targetPath = path.resolve(process.cwd(), projectName);
         // Start spinner for copying files
@@ -147,5 +160,6 @@ program
     .version(packageJson.version);
 program
     .argument("[project-name]", "Name of the project")
+    .option("-t, --template <template>", "Template to use (vue, react, extension)")
     .action(createProject);
 program.parse();
