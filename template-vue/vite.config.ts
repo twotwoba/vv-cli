@@ -14,9 +14,8 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-    const isPord = process.env.NODE_ENV === 'production'
+    const isProd = mode === 'production'
     const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
-    console.log('🌧 ~ defineConfig ~ env:', env)
 
     return {
         base: env.VITE_PUBLIC_PATH,
@@ -56,13 +55,13 @@ export default defineConfig(({ mode }) => {
             }
         },
         build: {
-            sourcemap: !isPord,
+            sourcemap: !isProd,
             manifest: true,
             minify: 'terser',
             terserOptions: {
                 compress: {
-                    drop_console: isPord,
-                    drop_debugger: isPord
+                    drop_console: isProd,
+                    drop_debugger: isProd
                 }
             },
             rollupOptions: {

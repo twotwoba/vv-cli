@@ -1,7 +1,7 @@
 import { Navigate, type RouteObject } from "react-router"
 import App from "@/App"
 import loadPage from "@/components/load-page"
-import UnexpectedError from "@/components/upexpected-error"
+import UnexpectedError from "@/components/unexpected-error"
 
 const RouteList: RouteObject[] = [
 	{

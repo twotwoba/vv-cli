@@ -62,10 +62,10 @@
 
 ```bash
 # 全局安装 CLI
-nnpm i @twotwoba/vv-cli -g
+npm i @twotwoba/vv-cli -g
 
 # 创建新项目
-vv <youer-project-name>
+vv <your-project-name>
 ```
 
 选择您偏爱的模板，立即开始构建您的下一个出色应用程序吧！

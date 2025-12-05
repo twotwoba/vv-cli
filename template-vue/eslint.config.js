@@ -10,22 +10,22 @@ export default [
     ...tseslint.configs.recommended,
     ...pluginVue.configs['flat/essential'],
     /* prettier-ignore */
-    { files: ['**/*.vue'], 
-        languageOptions: { 
-            parserOptions: { 
-                parser: tseslint.parser 
-            } 
-        } 
+    { files: ['**/*.vue'],
+        languageOptions: {
+            parserOptions: {
+                parser: tseslint.parser
+            }
+        }
     },
     {
         rules: {
-            'no-undef': 'off' // 由于使用了自动导入 api 的功能，所关闭此校验规则
-        },
-        'vue/multi-word-component-names': [
-            'error',
-            {
-                ignores: ['index']
-            }
-        ]
+            'no-undef': 'off', // 由于使用了自动导入 api 的功能，所关闭此校验规则
+            'vue/multi-word-component-names': [
+                'error',
+                {
+                    ignores: ['index']
+                }
+            ]
+        }
     }
 ]

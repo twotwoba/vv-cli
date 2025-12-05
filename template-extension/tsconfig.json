@@ -33,7 +33,7 @@
 		"types": [
 			"vite/client",
 			"chrome"
-		],
+		]
 	},
 	"include": [
 		"src/**/*.ts",

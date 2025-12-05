@@ -5,15 +5,14 @@ import tsconfigPaths from "vite-tsconfig-paths"
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-	const isPord = process.env.NODE_ENV === "production"
+	const isProd = mode === "production"
 	const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
-	console.log("🌧 ~ defineConfig ~ env:", env)
 
 	return {
 		base: env.VITE_OUTPUT_PATH,
 		plugins: [tsconfigPaths({ loose: true }), react(), tailwindcss()],
 		build: {
-			sourcemap: !isPord,
+			sourcemap: !isProd,
 			manifest: true,
 			minify: "esbuild",
 			rollupOptions: {
