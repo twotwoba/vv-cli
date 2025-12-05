@@ -1,0 +1,62 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        name: Build & Test
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [20, 22]
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build CLI
+              run: npm run build
+
+            - name: Verify CLI works
+              run: |
+                  node bin/index.js --version
+                  node bin/index.js --help
+
+            - name: Test project creation (React)
+              run: |
+                  mkdir -p /tmp/test-projects
+                  cd /tmp/test-projects
+                  echo "react" | node ${{ github.workspace }}/bin/index.js test-react-project
+                  cd test-react-project
+                  npm install
+                  npm run build
+
+            - name: Test project creation (Vue)
+              run: |
+                  cd /tmp/test-projects
+                  echo "vue" | node ${{ github.workspace }}/bin/index.js test-vue-project
+                  cd test-vue-project
+                  npm install
+                  npm run build
+
+            - name: Test project creation (Chrome Extension)
+              run: |
+                  cd /tmp/test-projects
+                  echo "chrome-extension" | node ${{ github.workspace }}/bin/index.js test-ext-project
+                  cd test-ext-project
+                  npm install
+                  npm run build
