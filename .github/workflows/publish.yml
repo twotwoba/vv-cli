@@ -44,11 +44,13 @@ jobs:
                   node bin/index.js --help
 
             - name: Publish to npm (Dry Run)
-              if: ${{ github.event.inputs.dry_run == 'true' }}
+              # 只有手动触发且 dry_run 为 true 时才执行 Dry Run
+              if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run == 'true' }}
               run: npm publish --dry-run --access public
 
             - name: Publish to npm
-              if: ${{ github.event.inputs.dry_run != 'true' }}
+              # Release 触发时总是发布，手动触发时需要 dry_run 为 false
+              if: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true') }}
               # 使用 Trusted Publishers，provenance 会自动生成，无需 --provenance 标志
               run: npm publish --access public
 
