@@ -52,8 +52,8 @@ jobs:
             - name: Publish to npm
               # Tag 推送时总是发布，手动触发时需要 dry_run 为 false
               if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true') }}
-              # 使用 Trusted Publishers，provenance 会自动生成，无需 --provenance 标志
-              run: npm publish --access public
+              # 使用 --provenance 启用 OIDC 认证和来源证明
+              run: npm publish --access public --provenance
 
             - name: Create publish summary
               run: |
