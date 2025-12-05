@@ -56,8 +56,6 @@ jobs:
               # 清除 NODE_AUTH_TOKEN，因为 actions/setup-node 会设置一个默认的无效 token
               # 这会干扰 npm 的 OIDC 认证，导致 404 错误
               run: npm publish --access public --provenance
-              env:
-                  NODE_AUTH_TOKEN: ""
 
             - name: Create publish summary
               run: |
