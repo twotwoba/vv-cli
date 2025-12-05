@@ -33,6 +33,13 @@ jobs:
                   cache: "npm"
                   # 不使用 registry-url，避免创建 .npmrc 干扰 OIDC 认证
 
+            # npm Trusted Publishers 需要 npm 11.5.1+
+            - name: Upgrade npm for OIDC support
+              run: npm install -g npm@latest
+
+            - name: Verify npm version
+              run: npm --version
+
             - name: Install dependencies
               run: npm ci
 
