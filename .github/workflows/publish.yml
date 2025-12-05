@@ -1,8 +1,9 @@
 name: Publish to npm
 
 on:
-    release:
-        types: [published]
+    push:
+        tags:
+            - "v*" # 推送 v 开头的 tag 时自动触发（如 v1.0.0, v2.3.1）
     # 也可以手动触发
     workflow_dispatch:
         inputs:
@@ -49,8 +50,8 @@ jobs:
               run: npm publish --dry-run --access public
 
             - name: Publish to npm
-              # Release 触发时总是发布，手动触发时需要 dry_run 为 false
-              if: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true') }}
+              # Tag 推送时总是发布，手动触发时需要 dry_run 为 false
+              if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true') }}
               # 使用 Trusted Publishers，provenance 会自动生成，无需 --provenance 标志
               run: npm publish --access public
 
