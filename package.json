@@ -6,6 +6,11 @@
     "bin": {
         "vv": "./bin/index.js"
     },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "prepublishOnly": "npm run build"
+    },
     "files": [
         "bin",
         "template-react",
@@ -14,27 +19,34 @@
         "!**/node_modules/**"
     ],
     "keywords": [
-        "cli",
         "vite",
+        "cli",
         "template",
         "react",
         "tailwindcss",
         "zustand",
         "swr",
         "motion",
-        "usehooks",
         "vue3",
-        "naive-ui",
         "unocss",
+        "pinia",
+        "naive-ui",
         "chrome",
         "extension"
     ],
     "author": "eric.yuan",
     "license": "MIT",
     "dependencies": {
-        "chalk": "^5.3.0",
+        "chalk": "^5.4.1",
         "commander": "^11.1.0",
         "fs-extra": "^11.2.0",
-        "inquirer": "^9.2.12"
+        "inquirer": "^9.3.7",
+        "ora": "^8.1.1"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "@types/inquirer": "^9.0.7",
+        "@types/node": "^22.10.1",
+        "typescript": "^5.7.2"
     }
 }
