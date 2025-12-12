@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 主题、国际化等自行配置
+ * 主题、国际化等配置
  */
 import { useThemeStore } from '@/store/modules/theme-store'
 

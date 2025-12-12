@@ -41,7 +41,7 @@ declare namespace AppRoute {
         /** 子路由 */
         children?: Route[]
         /* 页面组件 */
-        component: any
+        component: unknown
         /** 路由描述 */
         meta: RouteMeta
     }

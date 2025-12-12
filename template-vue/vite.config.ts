@@ -1,7 +1,6 @@
 import path from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -12,15 +11,17 @@ import unocss from 'unocss/vite'
 
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-    const isProd = mode === 'production'
+/** @type {import('vite').UserConfig} */
+export default defineConfig(({  mode }) => {
+    const isProd = mode === 'prod'
     const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
 
     return {
-        base: env.VITE_PUBLIC_PATH,
+        base: env.VITE_BUILD_BASE_PATH,
+        resolve: {
+          tsconfigPaths: true
+        },
         plugins: [
-            tsconfigPaths({ loose: true }),
             vue(),
             unocss(),
             AutoImport({
@@ -48,35 +49,31 @@ export default defineConfig(({ mode }) => {
             })
         ],
         css: {
-            preprocessorOptions: {
-                scss: {
-                    api: 'modern-compiler' // https://sass-lang.com/documentation/breaking-changes/legacy-js-api/
+            lightningcss:{
+                cssModules: {
+                    pattern: "[dir]_[name]--[hash:6]"
                 }
             }
         },
         build: {
+            // outDir: env.VITE_BUILD_OUT_PATH,
             sourcemap: !isProd,
-            manifest: true,
-            minify: 'terser',
+            cssMinify: "lightningcss",
+            minify:"oxc",
             terserOptions: {
                 compress: {
-                    drop_console: isProd,
-                    drop_debugger: isProd
+                    drop_console: true,
+                    drop_debugger: true
                 }
             },
-            rollupOptions: {
-                // outDir: path.join(__dirname, 'dist', env.VITE_OUTPUT_PATH),
+            target: "esnext",
+            rolldownOptions: {
                 output: {
-                    manualChunks(id) {
-                        if (id.includes('node_modules')) {
-                            return id.toString().split('node_modules/')[1].split('/')[0].toString()
-                        }
-                    },
-                    chunkFileNames: 'assets/js/[name]-[hash].js',
                     entryFileNames: 'assets/js/[name]-[hash].js',
-                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+                    chunkFileNames: 'assets/js/[name]-[hash].js',
+                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
                 }
-            }
+            },
         },
         server: {
             host: '0.0.0.0',
@@ -93,19 +90,3 @@ export default defineConfig(({ mode }) => {
         }
     }
 })
-
-/**
- * solve the problem of multiple proxies
- */
-// function handleProxy(list: [string, string][]) {
-//     const obj = {} as any
-//     list.forEach((v) => {
-//         obj[v[0]] = {
-//             target: v[1],
-//             rewrite: (path: string) => path.replace(new RegExp(`^${v[0]}`), ''),
-//             changeOrigin: true,
-//             secure: /^https:\/\//.test(v[1])
-//         }
-//     })
-//     return obj
-// }

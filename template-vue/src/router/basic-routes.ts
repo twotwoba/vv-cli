@@ -9,7 +9,7 @@ export const basicRoutes = [
         // component: Layout, // someone layout component
         children: [
             {
-                name: 'emailAccount',
+                name: 'HelloWorld',
                 path: '/hello-world',
                 component: () => import('@/views/hello-world/index.vue'),
                 meta: {
@@ -22,17 +22,13 @@ export const basicRoutes = [
     {
         name: '404',
         path: '/404',
-        component: () => import('@/views/error-page/404.vue'),
+        component: () => import('@/views/error-page/404-page.vue'),
         meta: {
             title: '页面飞走了'
         }
     },
     {
         path: '/:pathMatch(.*)*',
-        component: () => import('@/views/error-page/404.vue'),
-        name: '404',
-        meta: {
-            title: '页面飞走了'
-        }
+        redirect: '/404'
     }
 ]

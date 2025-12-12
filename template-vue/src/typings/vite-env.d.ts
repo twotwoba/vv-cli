@@ -1,14 +1,14 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    /** app title */
-    VITE_TITLE: string
-    /** router mode */
-    VITE_USE_HASH: string
-    /** axios baseURL */
-    VITE_AXIOS_BASE_URL: string
-    /** home path */
+    VITE_APP_TITLE: string
+    VITE_ROUTE_MODE: string
+    VITE_ROUTE_BASENAME: string
     VITE_HOME_PATH: string
-    /** public path */
-    VITE_PUBLIC_PATH: string
+
+    VITE_FETCH_BASE_URL: string
+    VITE_PROXY_URL: string
+
+    VITE_BUILD_BASE_PATH: string
+    VITE_BUILD_OUT_PATH: string
 }
