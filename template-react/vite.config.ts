@@ -9,14 +9,14 @@ export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
 
 	return {
-		base: env.VITE_OUTPUT_PATH,
+		base: env.VITE_BUILD_BASE_PATH,
 		plugins: [tsconfigPaths({ loose: true }), react(), tailwindcss()],
 		build: {
 			sourcemap: !isProd,
 			manifest: true,
 			minify: "esbuild",
 			rollupOptions: {
-				// outDir: path.join(__dirname, 'dist', env.VITE_OUTPUT_PATH),
+				// outDir: path.join(__dirname, 'dist', env.VITE_BUILD_OUT_PATH),
 				output: {
 					manualChunks(id) {
 						if (id.includes("node_modules")) {

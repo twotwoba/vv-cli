@@ -17,7 +17,7 @@ export default defineConfig(({  mode }) => {
     const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
 
     return {
-        base: env.VITE_BASE_PATH,
+        base: env.VITE_BUILD_BASE_PATH,
         resolve: {
           tsconfigPaths: true
         },
@@ -56,7 +56,7 @@ export default defineConfig(({  mode }) => {
             }
         },
         build: {
-            // outDir: env.VITE_OUT_PATH,
+            // outDir: env.VITE_BUILD_OUT_PATH,
             sourcemap: !isProd,
             cssMinify: "lightningcss",
             minify:"oxc",

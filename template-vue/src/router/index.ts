@@ -3,11 +3,13 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import { basicRoutes } from '@/router/basic-routes'
 import { setupRouterGuards } from './guards'
 
+
+const basename = import.meta.env.VITE_ROUTE_BASENAME
 export const router = createRouter({
     history:
-        import.meta.env.VITE_USE_HASH === 'true'
-            ? createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH || '/')
-            : createWebHistory(import.meta.env.VITE_PUBLIC_PATH || '/'),
+        import.meta.env.VITE_ROUTE_MODE === 'hash'
+            ? createWebHashHistory(basename)
+            : createWebHistory(basename),
     routes: basicRoutes,
     scrollBehavior: () => ({ left: 0, top: 0 })
 })
