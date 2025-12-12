@@ -19,7 +19,11 @@ export default defineConfig(({  mode }) => {
     return {
         base: env.VITE_BUILD_BASE_PATH,
         resolve: {
-          tsconfigPaths: true
+            // vite8新增
+            tsconfigPaths: true,
+            alias: {
+                '@': path.resolve(__dirname, 'src')
+            }
         },
         plugins: [
             vue(),
