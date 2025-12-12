@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import till from '@/utils/till'
 
 export function resolveError(code: number, message?: string, needTip = true) {
@@ -18,25 +19,35 @@ export function resolveError(code: number, message?: string, needTip = true) {
             message = message ?? `【${code}】: 未知异常!`
             break
     }
-    needTip && window.$message?.error(message)
+    if (needTip) {
+        window.$message?.error(message)
+    }
     return message
 }
 
 /**
- * auto loading
+ * 包装异步函数，自动管理 loading 状态和错误拦截，避免程序崩溃
+ * @param asyncFunction 异步函数
+ * @param loading 可选的 loading ref
+ * @returns 包装后的函数，返回 Promise 结果或 undefined（出错时）
  */
-export const withLoading = <T extends (...args: any[]) => Promise<any>>(
-    asyncFunction: T,
+export function withLoading<TArgs extends unknown[], TResult>(
+    asyncFunction: (...args: TArgs) => Promise<TResult>,
     loading?: Ref<boolean> | null
-) => {
-    return async (...args: Parameters<T>): Promise<ReturnType<T> | undefined> => {
-        typeof loading?.value === 'boolean' && (loading.value = true)
+) {
+    return async (...args: TArgs): Promise<TResult | undefined> => {
+        if (loading) {
+            loading.value = true
+        }
         const [err, res] = await till(asyncFunction(...args))
-        typeof loading?.value === 'boolean' && (loading.value = false)
+        if (loading) {
+            loading.value = false
+        }
         if (err) {
+            // 错误统一交给了拦截器
             console.error(err)
             return
         }
-        return res.data
+        return res
     }
 }

@@ -4,7 +4,7 @@ import 'virtual:svg-icons-register'
 
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
-import './assets/css/style.css'
+import '@/assets/css/style.css'
 
 import { setupStore } from './store'
 import { setupRouter } from './router'

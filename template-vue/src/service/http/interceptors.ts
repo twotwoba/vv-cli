@@ -7,7 +7,7 @@ export function setupInterceptors(axiosInstance: Axios) {
     axiosInstance.interceptors.response.use(resResolve, resReject)
 }
 
-function reqResolve(config: InternalAxiosRequestConfig<any>) {
+function reqResolve(config: InternalAxiosRequestConfig<unknown>) {
     /**
      * your code here
      */
@@ -27,11 +27,18 @@ function resResolve(response: AxiosResponse) {
     return Promise.resolve(data ?? response)
 }
 
-function reqReject(error: any) {
+function reqReject(error: unknown) {
     return Promise.reject(error)
 }
 
-async function resReject(error: any) {
+type ResRejectError ={
+    response: AxiosResponse,
+    code: number,
+    message: string,
+    error: unknown
+}
+
+async function resReject(error: ResRejectError) {
     if (!error || !error.response) {
         const code = error?.code
 

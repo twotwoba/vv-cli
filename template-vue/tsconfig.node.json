@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
-		"composite": true,
+	    /* no tsbuildinfo*/
+		"composite": false,
 		"skipLibCheck": true,
 		"module": "ESNext",
 		"moduleResolution": "bundler",
@@ -8,6 +9,7 @@
 		"strict": true
 	},
 	"include": [
-		"vite.config.ts"
+		"vite.config.ts",
+		"src/typings/vite-env.d.ts"
 	]
 }

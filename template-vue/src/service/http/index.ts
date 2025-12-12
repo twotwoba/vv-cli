@@ -22,8 +22,8 @@ export function createAxios(options = {}) {
 export const request = createAxios()
 
 export const ADemoRequest = createAxios({
-    baseURL: import.meta.env.VITE_AXIOS_BASE_URL + ServiceEnum.A
+    baseURL: import.meta.env.VITE_FETCH_PREFIX + ServiceEnum.A
 })
 export const BDemoRequest = createAxios({
-    baseURL: import.meta.env.VITE_AXIOS_BASE_URL + ServiceEnum.B
+    baseURL: import.meta.env.VITE_FETCH_PREFIX + ServiceEnum.B
 })
