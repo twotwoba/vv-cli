@@ -53,6 +53,7 @@ export default defineConfig(({  mode }) => {
             })
         ],
         css: {
+            transformer: "lightningcss",
             lightningcss:{
                 cssModules: {
                     pattern: "[dir]_[name]--[hash:6]"
@@ -61,22 +62,25 @@ export default defineConfig(({  mode }) => {
         },
         build: {
             // outDir: env.VITE_BUILD_OUT_PATH,
+            // vite8 默认配置
+            // cssMinify: "lightningcss",
+            // minify:"oxc",
             sourcemap: !isProd,
-            cssMinify: "lightningcss",
-            minify:"oxc",
-            terserOptions: {
-                compress: {
-                    drop_console: true,
-                    drop_debugger: true
-                }
-            },
             target: "esnext",
             rolldownOptions: {
                 output: {
                     entryFileNames: 'assets/js/[name]-[hash].js',
                     chunkFileNames: 'assets/js/[name]-[hash].js',
                     assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-                }
+                },
+                minify: isProd ? {
+                    terserOptions: {
+                        compress: {
+                            drop_console: true,
+                            drop_debugger: true
+                        }
+                    }
+                } : false
             },
         },
         server: {
