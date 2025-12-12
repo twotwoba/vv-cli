@@ -1,6 +1,6 @@
 {
     "name": "@twotwoba/vv-cli",
-    "version": "2.4.3",
+    "version": "2.4.4",
     "description": "Easily create Vite + React/Vue3 project with TailwindCSS and other useful libraries. Also support Chrome extension.",
     "type": "module",
     "bin": {
