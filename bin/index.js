@@ -10,17 +10,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Template paths
 const templatePathVue = path.resolve(__dirname, "../template-vue");
+const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile");
 const templatePathReact = path.resolve(__dirname, "../template-react");
 const templatePathExtension = path.resolve(__dirname, "../template-extension");
 // Read package.json to get version
 const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 const templateChoices = [
-    { name: "Vue3 + Vite + Naive UI + Unocss", value: "vue" },
+    { name: "Vue3 + Vite + Naive UI + Unocss (Desktop)", value: "vue" },
+    { name: "Vue3 + Vite + Varlet + Unocss (Mobile)", value: "vue-mobile" },
     { name: "React19 + Vite + shadcn/ui + tailwindcss", value: "react" },
     { name: "Chrome Extension + React19 + tailwindcss", value: "extension" }
 ];
 const templatePaths = {
     vue: templatePathVue,
+    "vue-mobile": templatePathVueMobile,
     react: templatePathReact,
     extension: templatePathExtension
 };
@@ -73,7 +76,7 @@ async function createProject(projectName, options) {
         let template;
         // Check if template is provided via CLI option
         if (options?.template) {
-            const validTemplates = ["vue", "react", "extension"];
+            const validTemplates = ["vue", "vue-mobile", "react", "extension"];
             if (!validTemplates.includes(options.template)) {
                 console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`));
                 process.exit(1);
@@ -160,6 +163,6 @@ program
     .version(packageJson.version);
 program
     .argument("[project-name]", "Name of the project")
-    .option("-t, --template <template>", "Template to use (vue, react, extension)")
+    .option("-t, --template <template>", "Template to use (vue, vue-mobile, react, extension)")
     .action(createProject);
 program.parse();

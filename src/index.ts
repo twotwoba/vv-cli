@@ -13,6 +13,7 @@ const __dirname = path.dirname(__filename)
 
 // Template paths
 const templatePathVue = path.resolve(__dirname, "../template-vue")
+const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile")
 const templatePathReact = path.resolve(__dirname, "../template-react")
 const templatePathExtension = path.resolve(__dirname, "../template-extension")
 
@@ -22,7 +23,7 @@ const packageJson = JSON.parse(
 ) as { version: string }
 
 // Template types
-type TemplateType = "vue" | "react" | "extension"
+type TemplateType = "vue" | "vue-mobile" | "react" | "extension"
 
 interface TemplateChoice {
     name: string
@@ -30,13 +31,15 @@ interface TemplateChoice {
 }
 
 const templateChoices: TemplateChoice[] = [
-    { name: "Vue3 + Vite + Naive UI + Unocss", value: "vue" },
+    { name: "Vue3 + Vite + Naive UI + Unocss (Desktop)", value: "vue" },
+    { name: "Vue3 + Vite + Varlet + Unocss (Mobile)", value: "vue-mobile" },
     { name: "React19 + Vite + shadcn/ui + tailwindcss", value: "react" },
     { name: "Chrome Extension + React19 + tailwindcss", value: "extension" }
 ]
 
 const templatePaths: Record<TemplateType, string> = {
     vue: templatePathVue,
+    "vue-mobile": templatePathVueMobile,
     react: templatePathReact,
     extension: templatePathExtension
 }
@@ -95,7 +98,7 @@ async function createProject(projectName?: string, options?: { template?: string
 
         // Check if template is provided via CLI option
         if (options?.template) {
-            const validTemplates: TemplateType[] = ["vue", "react", "extension"]
+            const validTemplates: TemplateType[] = ["vue", "vue-mobile", "react", "extension"]
             if (!validTemplates.includes(options.template as TemplateType)) {
                 console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`))
                 process.exit(1)
@@ -191,7 +194,7 @@ program
 
 program
     .argument("[project-name]", "Name of the project")
-    .option("-t, --template <template>", "Template to use (vue, react, extension)")
+    .option("-t, --template <template>", "Template to use (vue, vue-mobile, react, extension)")
     .action(createProject)
 
 program.parse()
