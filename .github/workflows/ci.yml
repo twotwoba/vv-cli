@@ -42,21 +42,24 @@ jobs:
                   cd /tmp/test-projects
                   node ${{ github.workspace }}/bin/index.js test-react-project --template react
                   cd test-react-project
-                  npm install
-                  npm run build
+                  npm i pnpm -g
+                  pnpm install
+                  pnpm build
 
             - name: Test project creation (Vue)
               run: |
                   cd /tmp/test-projects
                   node ${{ github.workspace }}/bin/index.js test-vue-project --template vue
                   cd test-vue-project
-                  npm install
-                  npm run build
+                  npm i pnpm -g
+                  pnpm install
+                  pnpm build
 
             - name: Test project creation (Chrome Extension)
               run: |
                   cd /tmp/test-projects
                   node ${{ github.workspace }}/bin/index.js test-ext-project --template extension
                   cd test-ext-project
-                  npm install
-                  npm run build
+                  npm i pnpm -g:
+                  pnpm install
+                  pnpm build
