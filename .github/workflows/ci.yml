@@ -55,6 +55,15 @@ jobs:
                   pnpm install
                   pnpm build
 
+            - name: Test project creation (Vue-mobile)
+              run: |
+                  cd /tmp/test-projects
+                  node ${{ github.workspace }}/bin/index.js test-vue-mobile-project --template vue-mobile
+                  cd test-vue-project
+                  npm i pnpm -g
+                  pnpm install
+                  pnpm build
+
             - name: Test project creation (Chrome Extension)
               run: |
                   cd /tmp/test-projects
