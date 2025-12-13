@@ -59,7 +59,7 @@ jobs:
               run: |
                   cd /tmp/test-projects
                   node ${{ github.workspace }}/bin/index.js test-vue-mobile-project --template vue-mobile
-                  cd test-vue-project
+                  cd test-vue-mobile-project
                   npm i pnpm -g
                   pnpm install
                   pnpm build
