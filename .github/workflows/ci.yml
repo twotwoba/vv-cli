@@ -69,6 +69,6 @@ jobs:
                   cd /tmp/test-projects
                   node ${{ github.workspace }}/bin/index.js test-ext-project --template extension
                   cd test-ext-project
-                  npm i pnpm -g:
+                  npm i pnpm -g
                   pnpm install
                   pnpm build
