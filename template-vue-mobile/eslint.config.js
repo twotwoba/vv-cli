@@ -26,6 +26,13 @@ export default [
                 {
                     ignores: ['index']
                 }
+            ],
+            '@typescript-eslint/no-unused-vars': [
+                'error', // 级别：error/warn/off
+                {
+                    argsIgnorePattern: '^_', // 忽略函数参数中以 _ 开头的变量（包括 _）
+                    varsIgnorePattern: '^_', // 忽略普通变量中以 _ 开头的变量（包括 _）
+                },
             ]
         }
     }

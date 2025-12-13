@@ -1,237 +1,311 @@
-import useSWR, { type BareFetcher, type SWRConfiguration } from "swr"
-import useSWRInfinite, {
-	type SWRInfiniteConfiguration,
-	type SWRInfiniteKeyLoader
-} from "swr/infinite"
-import useSWRMutation from "swr/mutation"
+import {
+	useQuery,
+	useMutation,
+	useInfiniteQuery,
+	type UseQueryOptions,
+	type UseMutationOptions,
+	type QueryKey
+} from "@tanstack/react-query"
 import { getAuthToken, isPublicApi } from "@/lib/auth"
 import { AUTH_KEY } from "@/lib/global-keys"
 import { filterObjNull } from "@/lib/utils"
 import { FetchError, processData, resolveError } from "./server-helper"
 
-const defaultHeaders: HeadersInit = {
-	"Content-Type": "application/json"
+// ============================================================================
+// Types
+// ============================================================================
+
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
+
+interface RequestConfig extends Omit<RequestInit, "body"> {
+	body?: Record<string, unknown> | FormData | string
+	params?: Record<string, unknown>
 }
+
+interface FetcherOptions {
+	baseURL?: string
+	method?: HttpMethod
+}
+
+// ============================================================================
+// Core Fetcher
+// ============================================================================
+
 /**
- * @description            全局 Fetcher 函数
- * @returns {Promise<any>} 返回一个 Promise，解析为响应数据
+ * 构建请求 headers，每次请求创建新对象避免并发问题
  */
-export const fetcher = async (url: string, options: RequestInit = {}): Promise<any> => {
-	if (!url) {
-		throw new FetchError("URL is required", 400)
-	}
-	if (typeof url !== "string") {
-		throw new FetchError("URL must be a string", 400)
+const buildHeaders = (customHeaders?: HeadersInit): HeadersInit => {
+	const headers: Record<string, string> = {
+		"Content-Type": "application/json"
 	}
 
 	const token = getAuthToken()
-
-	// 检查URL是否是 PASS 开头的接口（登录、注册等不需要认证的接口）
-	if (
-		token &&
-		!isPublicApi(url) &&
-		!(options.headers && (options.headers as Record<string, string>)[AUTH_KEY])
-	) {
-		defaultHeaders[AUTH_KEY] = token
+	if (token) {
+		headers[AUTH_KEY] = token
 	}
 
-	if (options.body && typeof options.body === "object" && !(options.body instanceof FormData)) {
-		options.body = JSON.stringify(options.body)
+	return { ...headers, ...(customHeaders as Record<string, string>) }
+}
+
+/**
+ * 构建完整 URL
+ */
+const buildURL = (baseURL: string, endpoint: string, params?: Record<string, unknown>): string => {
+	let url: string
+
+	if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
+		const base = new URL(baseURL)
+		const pathname = base.pathname === "/" ? "" : base.pathname
+		const normalizedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`
+		url = new URL(pathname + normalizedEndpoint, base.origin).toString()
+	} else {
+		const separator = baseURL.endsWith("/") || endpoint.startsWith("/") ? "" : "/"
+		url = baseURL + separator + endpoint.replace(/^\//, "")
 	}
 
-	const finalOptions = {
-		...options,
-		headers: {
-			...defaultHeaders,
-			...(options.headers || {})
+	if (params) {
+		const filtered = filterObjNull(params)
+		if (filtered && Object.keys(filtered).length > 0) {
+			const searchParams = new URLSearchParams(filtered as Record<string, string>)
+			url += (url.includes("?") ? "&" : "?") + searchParams.toString()
 		}
 	}
 
-	const response = await fetch(url, finalOptions)
-	// console.log('======response log=====>', response)
+	return url
+}
+
+/**
+ * 核心 fetch 函数
+ */
+export const fetcher = async <T = unknown>(
+	endpoint: string,
+	options: RequestConfig & FetcherOptions = {}
+): Promise<T> => {
+	const { baseURL = import.meta.env.VITE_API_URL, method = "GET", params, body, ...rest } = options
+
+	if (!endpoint) {
+		throw new FetchError("Endpoint is required", 400)
+	}
+
+	// 构建 URL
+	const shouldAppendParams = method === "GET" || method === "DELETE"
+	const url = buildURL(baseURL, endpoint, shouldAppendParams ? params : undefined)
+
+	// 构建 headers（跳过公开接口的 token）
+	const skipAuth = isPublicApi(endpoint)
+	const headers = buildHeaders(rest.headers)
+	if (skipAuth) {
+		delete (headers as Record<string, string>)[AUTH_KEY]
+	}
+
+	// 构建 body
+	let finalBody: string | FormData | undefined
+	const bodyData = body ?? (!shouldAppendParams ? params : undefined)
+	if (bodyData) {
+		if (bodyData instanceof FormData) {
+			finalBody = bodyData
+			delete (headers as Record<string, string>)["Content-Type"]
+		} else if (typeof bodyData === "string") {
+			finalBody = bodyData
+		} else {
+			finalBody = JSON.stringify(bodyData)
+		}
+	}
+
+	const response = await fetch(url, {
+		...rest,
+		method,
+		headers,
+		body: finalBody
+	})
+
 	if (!response.ok) {
 		const msg = resolveError(response.status)
-		throw new FetchError("SWR Fetch failed", response.status, {
-			url,
-			options,
-			msg
+		throw new FetchError(msg, response.status, { url, method })
+	}
+
+	const contentType = response.headers.get("content-type")
+	if (contentType?.includes("application/json")) {
+		const res = await response.json()
+		return processData(res) as T
+	}
+
+	return response.text() as unknown as T
+}
+
+// ============================================================================
+// Query Factory - 用于创建查询 hooks
+// ============================================================================
+
+type QueryOptions<TData, TParams> = Omit<
+	UseQueryOptions<TData, FetchError, TData, QueryKey>,
+	"queryKey" | "queryFn"
+> & {
+	params?: TParams
+}
+
+/**
+ * 创建查询 Hook 工厂函数
+ *
+ * @template TData 响应数据类型
+ * @template TParams 请求参数类型
+ * @param endpoint API 端点
+ * @param baseOptions 基础配置
+ *
+ * @example
+ * // 定义 API
+ * export const useUser = createQuery<User>('/api/user')
+ * export const useUserById = createQuery<User, { id: string }>('/api/user')
+ *
+ * // 使用
+ * const { data, isLoading } = useUser()
+ * const { data } = useUserById({ params: { id: '123' } })
+ */
+export const createQuery = <TData = unknown, TParams extends Record<string, unknown> = Record<string, unknown>>(
+	endpoint: string,
+	baseOptions?: FetcherOptions
+) => {
+	return (options?: QueryOptions<TData, TParams>) => {
+		const { params, ...queryOptions } = options ?? {}
+
+		return useQuery<TData, FetchError>({
+			queryKey: params ? [endpoint, params] : [endpoint],
+			queryFn: () =>
+				fetcher<TData>(endpoint, {
+					...baseOptions,
+					method: "GET",
+					params: params as Record<string, unknown>
+				}),
+			...queryOptions
 		})
 	}
-	const res = await response.json()
-	return processData(res)
 }
 
-/**
- * @description        创建自定义 Fetch 实例
- * @param {string}     baseURL  基础 URL
- * @param {string}     method   请求方法
- * @returns {Function} 返回一个自定义 Fetch 函数
- */
-export const createFetcher = (
-	baseURL: string,
-	method?: "GET" | "POST" | "PUT" | "DELETE"
-): BareFetcher<any> => {
-	return async (endpoint: string | [string, any], options: RequestInit = {}) => {
-		// 处理本地代理和线上环境的URL
-		let url: string
-		let midEndpoint: string
-		let params = null
-		if (Array.isArray(endpoint)) {
-			midEndpoint = endpoint[0]
-			params = endpoint[1]
-			params = filterObjNull(endpoint[1] || "") // 处理参数
-		} else {
-			midEndpoint = endpoint
-		}
+// ============================================================================
+// Mutation Factory - 用于创建变更 hooks
+// ============================================================================
 
-		if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
-			const pathname = new URL(baseURL).pathname
-			if (pathname && pathname !== "/" && !midEndpoint.startsWith(pathname)) {
-				midEndpoint = pathname + (midEndpoint.startsWith("/") ? midEndpoint : `/${midEndpoint}`)
-			}
-			url = new URL(midEndpoint, baseURL).toString()
-		} else {
-			url = baseURL.endsWith("/")
-				? baseURL + midEndpoint.replace(/^\//, "")
-				: baseURL + (midEndpoint.startsWith("/") ? midEndpoint : `/${midEndpoint}`)
-		}
-
-		// 根据请求方法决定参数传递方式
-		const finalOptions = { ...options, method }
-		if (params) {
-			if (method === "GET" || method === "DELETE") {
-				// GET/DELETE 请求使用查询参数
-				// biome-ignore lint/style/useTemplate: <string concatenation is clearer here>
-				url = url + "?" + new URLSearchParams(params).toString()
-			} else if (method === "POST" || method === "PUT") {
-				finalOptions.body = params as any
-			}
-		}
-		return fetcher(url, { ...options, method })
-	}
-}
-
-//  请求实例
-const GetFetcher = createFetcher(import.meta.env.VITE_API_URL, "GET")
-const PostFetcher = createFetcher(import.meta.env.VITE_API_URL, "POST")
-const PutFetcher = createFetcher(import.meta.env.VITE_API_URL, "PUT")
-const DeleteFetcher = createFetcher(import.meta.env.VITE_API_URL, "DELETE")
+type MutationOptions<TData, TBody> = Omit<
+	UseMutationOptions<TData, FetchError, TBody>,
+	"mutationFn"
+>
 
 /**
- * @param       endpoint API
- * @template    T 请求返回的数据类型
- * @template    P 请求查询参数的数据类型
- * @description 创建一个查询 hook，使用 SWR 进行数据获取
+ * 创建变更 Hook 工厂函数
+ *
+ * @template TData 响应数据类型
+ * @template TBody 请求体类型
+ * @param endpoint API 端点
+ * @param method HTTP 方法
+ * @param baseOptions 基础配置
+ *
  * @example
- * const useUser = createQuery<User>('/api/user')
+ * // 定义 API
+ * export const useCreateUser = createMutation<User, CreateUserDTO>('/api/user', 'POST')
+ * export const useUpdateUser = createMutation<User, UpdateUserDTO>('/api/user', 'PUT')
+ * export const useDeleteUser = createMutation<void, { id: string }>('/api/user', 'DELETE')
+ *
+ * // 使用
+ * const { mutate, mutateAsync, isPending } = useCreateUser()
+ * mutate({ name: 'John', email: 'john@example.com' })
  */
-export const createQuery = <T = any, P = any>(endpoint: string) => {
-	if (!endpoint) {
-		throw new Error("Endpoint is required for query")
+export const createMutation = <TData = unknown, TBody = unknown>(
+	endpoint: string,
+	method: "POST" | "PUT" | "DELETE" | "PATCH" = "POST",
+	baseOptions?: Omit<FetcherOptions, "method">
+) => {
+	return (options?: MutationOptions<TData, TBody>) => {
+		return useMutation<TData, FetchError, TBody>({
+			mutationFn: (body: TBody) =>
+				fetcher<TData>(endpoint, {
+					...baseOptions,
+					method,
+					body: body as Record<string, unknown>
+				}),
+			...options
+		})
 	}
+}
 
-	return (options?: { enabled?: boolean; params?: P } & SWRConfiguration) => {
-		const shouldFetch = options?.enabled !== false
+// ============================================================================
+// Infinite Query Factory - 用于创建无限加载 hooks
+// ============================================================================
 
-		const { data, error, isLoading, mutate, isValidating } = useSWR<T>(
-			shouldFetch ? [endpoint, options?.params] : null,
-			GetFetcher,
-			options
-		)
+interface PageParam {
+	current: number
+	pageSize?: number
+}
 
-		return {
-			data,
-			error,
-			isLoading,
-			isValidating,
-			mutate,
-			isError: !!error,
-			isSuccess: !error && !isLoading && data !== undefined
-		}
-	}
+interface InfiniteQueryOptions<TData, TParams> {
+	params?: TParams
+	pageSize?: number
+	enabled?: boolean
+	getNextPageParam?: (lastPage: TData, allPages: TData[]) => PageParam | undefined
 }
 
 /**
- * @param       endpoint API
- * @template    T 请求发送的数据类型
- * @description 创建一个变更函数，使用 SWR Mutation 进行数据提交
+ * 创建无限查询 Hook 工厂函数
+ *
+ * @template TData 单页数据类型
+ * @template TParams 额外请求参数类型
+ * @param endpoint API 端点
+ * @param baseOptions 基础配置
+ *
  * @example
- * const useCreateUser = createMutation<User>('/api/user', 'POST')
+ * // 定义 API（假设返回 { list: User[], total: number }）
+ * export const useUserList = createInfiniteQuery<{ list: User[], total: number }>('/api/users')
+ *
+ * // 使用
+ * const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useUserList({
+ *   params: { status: 'active' },
+ *   pageSize: 20
+ * })
  */
-export const createMutation = <T>(endpoint: string, method?: "POST" | "PUT" | "DELETE") => {
-	if (!endpoint) {
-		throw new Error("Endpoint is required for mutation")
-	}
-	let fetcher: BareFetcher<T>
-	switch (method) {
-		case "POST":
-			fetcher = PostFetcher
-			break
-		case "PUT":
-			fetcher = PutFetcher
-			break
-		case "DELETE":
-			fetcher = DeleteFetcher
-			break
-		default:
-			fetcher = PostFetcher
-	}
-	return () => {
-		const { data, error, isMutating, trigger, reset } = useSWRMutation(
-			endpoint,
-			(url, { arg }: { arg: T }) => fetcher(url, { body: JSON.stringify(arg) })
-		)
-		return { data, error, isMutating, trigger, reset }
+export const createInfiniteQuery = <
+	TData = unknown,
+	TParams extends Record<string, unknown> = Record<string, unknown>
+>(
+	endpoint: string,
+	baseOptions?: FetcherOptions
+) => {
+	return (options?: InfiniteQueryOptions<TData, TParams>) => {
+		const { params, pageSize = 10, getNextPageParam, ...queryOptions } = options ?? {}
+
+		return useInfiniteQuery<TData, FetchError, TData, QueryKey, PageParam>({
+			queryKey: params ? [endpoint, "infinite", params] : [endpoint, "infinite"],
+			queryFn: ({ pageParam }) =>
+				fetcher<TData>(endpoint, {
+					...baseOptions,
+					method: "GET",
+					params: {
+						...params,
+						current: pageParam.current,
+						pageSize: pageParam.pageSize ?? pageSize
+					} as Record<string, unknown>
+				}),
+			initialPageParam: { current: 1, pageSize },
+			getNextPageParam:
+				getNextPageParam ??
+				((lastPage, allPages) => {
+					// 默认实现：假设返回数据有 total 字段
+					const page = lastPage as { total?: number; list?: unknown[] }
+					const loadedCount = allPages.reduce((acc, p) => {
+						const items = (p as { list?: unknown[] }).list
+						return acc + (items?.length ?? 0)
+					}, 0)
+
+					if (page.total && loadedCount < page.total) {
+						return { current: allPages.length + 1, pageSize }
+					}
+					return undefined
+				}),
+			...queryOptions
+		})
 	}
 }
 
-/**
- * @param endpoint API
- * @template T 请求返回的数据类型
- * @template P 请求查询参数的数据类型
- * @description 创建一个无限查询 hook，使用 SWR Infinite 进行数据获取
- * @example
- * const useUserList = createInfiniteQuery<User>('/api/user')
- */
-export const createInfiniteQuery = <T = any, P = any>(endpoint: string) => {
-	if (!endpoint) {
-		throw new Error("Endpoint is required for infinite query")
-	}
+// ============================================================================
+// Prefetch helpers - 用于预取数据
+// ============================================================================
 
-	return (
-		options?: {
-			enabled?: boolean
-			params?: P
-			getKey?: SWRInfiniteKeyLoader<T, any>
-		} & SWRInfiniteConfiguration<T>
-	) => {
-		const shouldFetch = options?.enabled !== false
-
-		const getKeyFunction = (pageIndex: number, previousPageData: T | null) => {
-			// 外部自定义 getKey 函数
-			if (options?.getKey) {
-				return options.getKey(pageIndex, previousPageData)
-			}
-
-			return [endpoint, { ...options?.params, current: pageIndex + 1 }]
-		}
-
-		const { data, error, isLoading, mutate, isValidating, size, setSize } = useSWRInfinite<T>(
-			shouldFetch ? getKeyFunction : () => null,
-			GetFetcher,
-			options
-		)
-
-		return {
-			data,
-			error,
-			isLoading,
-			isValidating,
-			mutate,
-			isError: !!error,
-			isSuccess: !error && !isLoading && data !== undefined,
-			size,
-			setSize
-		}
-	}
-}
+export { fetcher as apiFetcher }

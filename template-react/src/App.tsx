@@ -1,215 +1,63 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
-import { SWRConfig } from "swr"
 import { clearAuthToken } from "./lib/auth"
+import { isFetchError } from "./service/server-helper"
+
+// 创建 QueryClient 实例
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			// 失败重试次数
+			retry: 2,
+			// 重试延迟
+			retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+			// 窗口聚焦时不自动重新获取
+			refetchOnWindowFocus: false,
+			// 网络重连时重新获取
+			refetchOnReconnect: true,
+			// 数据过期时间（5分钟）
+			staleTime: 5 * 60 * 1000,
+			// 缓存时间（10分钟）
+			gcTime: 10 * 60 * 1000
+		},
+		mutations: {
+			// mutation 失败不重试
+			retry: false
+		}
+	}
+})
 
 function App() {
 	const navigate = useNavigate()
+
+	// 全局错误处理
+	queryClient.setDefaultOptions({
+		queries: {
+			...queryClient.getDefaultOptions().queries
+		},
+		mutations: {
+			...queryClient.getDefaultOptions().mutations,
+			onError: (error) => {
+				if (isFetchError(error) && error.isUnauthorized()) {
+					clearAuthToken()
+					navigate("/login")
+					console.error("Unauthorized access detected. Redirecting to login page.", error)
+				}
+			}
+		}
+	})
+
 	return (
-		<>
-			<SWRConfig
-				value={{
-					errorRetryCount: 3,
-					errorRetryInterval: 1000,
-					revalidateOnFocus: false,
-					revalidateOnReconnect: true,
-					onError: (error, key) => {
-						if (error.status === 401) {
-							clearAuthToken()
-							navigate("/login")
-							console.error("Unauthorized access detected. Redirecting to login page.", error, key)
-						}
-					}
-				}}
-			>
-				<div className="flex h-full w-full items-center justify-center bg-gray-300">
-					<div className="font-mono text-4xl font-bold tracking-tight"></div>
-					<div className="flex space-x-1">
-						{/* H */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-blue-500"></div>
-						</div>
-						{/* E */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-							<div className="h-4 w-4 bg-red-500"></div>
-						</div>
-						{/* L */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-							<div className="h-4 w-4 bg-green-500"></div>
-						</div>
-						{/* L */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-							<div className="h-4 w-4 bg-yellow-500"></div>
-						</div>
-						{/* O */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-							<div className="h-4 w-4 bg-purple-500"></div>
-						</div>
-						<div className="w-4"></div> {/* Space */}
-						{/* W */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-cyan-500"></div>
-						</div>
-						{/* O */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-							<div className="h-4 w-4 bg-orange-500"></div>
-						</div>
-						{/* R */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-pink-500"></div>
-						</div>
-						{/* L */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-							<div className="h-4 w-4 bg-indigo-500"></div>
-						</div>
-						{/* D */}
-						<div className="grid grid-cols-3 gap-0.5">
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4 bg-teal-500"></div>
-							<div className="h-4 w-4"></div>
-						</div>
-					</div>
+		<QueryClientProvider client={queryClient}>
+			<div className="flex h-full w-full items-center justify-center bg-gray-100">
+				<div className="text-center">
+					<h1 className="text-4xl font-bold text-gray-800 mb-4">Hello World</h1>
+					<p className="text-gray-600">React + TanStack Query Template</p>
 				</div>
-			</SWRConfig>
-		</>
+			</div>
+		</QueryClientProvider>
 	)
 }
 
 export default App
+

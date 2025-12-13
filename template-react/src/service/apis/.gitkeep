@@ -1,16 +1,138 @@
-// useSWR hooks for API calls
+// TanStack Query hooks for API calls
+// 使用 createQuery, createMutation, createInfiniteQuery 工厂函数创建 API hooks
 
-/* 
-demo:
+/*
+============================================================================
+Query 查询示例
+============================================================================
 
-export const useUser = () => { 
-    const { data, error, isLoading, mutate } = useSWR('/api/user')
-    return {
-        user: data,
-        isLoading,
-        isError: !!error,
-        error,
-        refreshUser: mutate
+import { createQuery } from '@/service'
+
+// 定义类型
+interface User {
+    id: string
+    name: string
+    email: string
+}
+
+interface UserListParams {
+    status?: 'active' | 'inactive'
+    search?: string
+}
+
+// 创建查询 hook
+export const useUser = createQuery<User>('/api/user')
+export const useUserList = createQuery<User[], UserListParams>('/api/users')
+
+// 使用示例
+function UserProfile() {
+    const { data: user, isLoading, error } = useUser()
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Error: {error.message}</div>
+
+    return <div>{user?.name}</div>
+}
+
+// 带参数的查询
+function UserList() {
+    const { data: users } = useUserList({
+        params: { status: 'active' },
+        enabled: true // 可选：条件查询
+    })
+
+    return <ul>{users?.map(u => <li key={u.id}>{u.name}</li>)}</ul>
+}
+
+============================================================================
+Mutation 变更示例
+============================================================================
+
+import { createMutation } from '@/service'
+
+interface CreateUserDTO {
+    name: string
+    email: string
+}
+
+// 创建变更 hook
+export const useCreateUser = createMutation<User, CreateUserDTO>('/api/user', 'POST')
+export const useUpdateUser = createMutation<User, Partial<User>>('/api/user', 'PUT')
+export const useDeleteUser = createMutation<void, { id: string }>('/api/user', 'DELETE')
+
+// 使用示例
+function CreateUserForm() {
+    const { mutate, mutateAsync, isPending, error } = useCreateUser()
+
+    const handleSubmit = async (data: CreateUserDTO) => {
+        // 方式1: 使用 mutate（不返回 Promise）
+        mutate(data, {
+            onSuccess: (newUser) => {
+                console.log('User created:', newUser)
+            },
+            onError: (error) => {
+                console.error('Failed:', error.message)
+            }
+        })
+
+        // 方式2: 使用 mutateAsync（返回 Promise）
+        try {
+            const newUser = await mutateAsync(data)
+            console.log('User created:', newUser)
+        } catch (err) {
+            console.error('Failed:', err)
+        }
     }
+
+    return (
+        <form onSubmit={...}>
+            {isPending && <span>Creating...</span>}
+            {error && <span>Error: {error.message}</span>}
+        </form>
+    )
+}
+
+============================================================================
+Infinite Query 无限加载示例
+============================================================================
+
+import { createInfiniteQuery } from '@/service'
+
+interface UserListResponse {
+    list: User[]
+    total: number
+}
+
+// 创建无限查询 hook
+export const useInfiniteUserList = createInfiniteQuery<UserListResponse>('/api/users')
+
+// 使用示例
+function InfiniteUserList() {
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage
+    } = useInfiniteUserList({
+        params: { status: 'active' },
+        pageSize: 20
+    })
+
+    // data.pages 是所有页面数据的数组
+    const allUsers = data?.pages.flatMap(page => page.list) ?? []
+
+    return (
+        <>
+            <ul>{allUsers.map(u => <li key={u.id}>{u.name}</li>)}</ul>
+            {hasNextPage && (
+                <button
+                    onClick={() => fetchNextPage()}
+                    disabled={isFetchingNextPage}
+                >
+                    {isFetchingNextPage ? 'Loading...' : 'Load More'}
+                </button>
+            )}
+        </>
+    )
 }
 */
