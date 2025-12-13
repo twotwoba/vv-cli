@@ -15,6 +15,7 @@
         "bin",
         "template-react",
         "template-vue",
+        "template-vue-mobile",
         "template-extension",
         "!**/node_modules/**"
     ],
