@@ -1,3 +1,4 @@
+import { filterObjNull } from '@/utils'
 import { FetchError, processData, resolveError } from './server-helper'
 
 // ============================================================================
@@ -21,20 +22,6 @@ interface FetcherOptions {
 // ============================================================================
 
 const AUTH_KEY = 'auth_token'
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-/**
- * 过滤对象中的 null/undefined 值
- */
-const filterObjNull = <T extends Record<string, unknown>>(obj: T): Partial<T> | undefined => {
-    if (typeof obj !== 'object' || obj == null) return
-    return Object.fromEntries(
-        Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)
-    ) as Partial<T>
-}
 
 /**
  * 构建请求 headers
