@@ -14,7 +14,7 @@ We've taken care of the essential setup so you can focus on building amazing app
 -   **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
 -   **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
 
-> [TODO] Rolldown is Coming soon!
+> template-vue and template-vue-mobile now is using Vite8(rolldown beta)
 
 ---
 
@@ -24,7 +24,7 @@ Based on the official [React-TS](https://github.com/vitejs/vite/tree/main/packag
 
 1.  **Shadcn UI**: Beautifully designed, customizable UI components to accelerate your development.
 2.  **Tailwind CSS + Lucide Icons**: A utility-first CSS framework paired with a comprehensive, consistent icon set.
-3.  **SWR + fetch**: A lightweight library for data fetching, caching, and revalidation..
+3.  **Tanstack Query**: Powerful asynchronous state management for data fetching, caching, and synchronization.
 4.  **useHooks**: A collection of frequently used, battle-tested React Hooks to enhance your component logic.
 5.  **Zustand State Management**: A small, fast, and scalable state management solution for React.
 6.  **Biome**：replace eslint&prettier，smoother development experience。
@@ -37,7 +37,19 @@ Based on the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages
 
 1.  **Auto Imports**: Say goodbye to manual imports! Automatically import APIs and components for a smoother coding experience.
 2.  **Unocss + Iconify**: A powerful combination for styling and flexible icon management.
-3.  **Pre-configured Axios**: Get started with robust HTTP requests right out of the box.
+3.  **Tanstack Query**: Powerful asynchronous state management for data fetching, caching, and synchronization.
+4.  **vueuse**: A collection of frequently used, battle-tested Vue Hooks to enhance your component logic.
+5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
+
+---
+
+## 📱 Vue 3 Mobile Development Template
+
+Based on the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) starter, tailored for mobile development:
+
+1.  **Auto Imports**: Say goodbye to manual imports! Automatically import APIs and components for a smoother coding experience.
+2.  **Unocss + Iconify**: A powerful combination for styling and flexible icon management.
+3.  **Tanstack Query**: Powerful asynchronous state management for data fetching, caching, and synchronization.
 4.  **vueuse**: A collection of frequently used, battle-tested Vue Hooks to enhance your component logic.
 5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
 

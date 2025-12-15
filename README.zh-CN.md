@@ -1,3 +1,7 @@
+
+Here is the updated `README.zh-CN.md`:
+
+```/Users/eric/dev/vv-cli/README.zh-CN.md
 简体中文 | [English](README.md)
 
 # 🚀 React、Vue 与 Chrome 扩展开发模板
@@ -14,7 +18,7 @@
 -   **包管理器**：我们统一使用 **pnpm**，以实现高效可靠的依赖管理。
 -   **极速开发体验**：两个模板都利用 **Vite 5+**，为您提供令人难以置信的快速开发服务器和构建时间。
 
-> [TODO] Rolldown 马上就要来啦～!
+> template-vue 和 template-vue-mobile 现在使用 Vite8(rolldown beta)
 
 ---
 
@@ -24,7 +28,7 @@
 
 1.  **Shadcn UI**: 精心设计、可定制的 UI 组件，加速您的开发。
 2.  **Tailwind CSS + Lucide Icons**: 一个实用至上的 CSS 框架，搭配一套全面且风格一致的图标集。
-3.  **SWR + fetcher**: 一个轻量级的数据获取、缓存和重新验证库，配和原生 fetch，开发体验拉满。
+3.  **Tanstack Query**: 强大的异步状态管理库，用于数据获取、缓存和同步。
 4.  **useHooks**: 一系列常用且经过实践检验的 React Hooks，增强您的组件逻辑。
 5.  **Zustand 状态管理**: 一个小巧、快速且可扩展的 React 状态管理方案。
 6.  **Biome**：替代eslint&prettier，更流畅的开发体验。
@@ -37,7 +41,19 @@
 
 1.  **自动导入**: 告别手动导入！自动导入 API 和组件，带来更流畅的编码体验。
 2.  **Unocss + Iconify**: 强大的组合，用于样式设计和灵活的图标管理方案。
-3.  **预配置 Axios**: 开箱即用，轻松发起健壮的 HTTP 请求。
+3.  **Tanstack Query**: 强大的异步状态管理库，用于数据获取、缓存和同步。
+4.  **vueuse**: 一系列常用的 vue hooks，增强您的组件逻辑。
+5.  **Pinia 状态管理**: 适用于 Vue 的简单、直观且类型安全的状态管理方案。
+
+---
+
+## 📱 Vue 3 移动端开发模板
+
+此模板基于官方 [Vue-TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts) 启动器，并为移动端开发进行了优化：
+
+1.  **自动导入**: 告别手动导入！自动导入 API 和组件，带来更流畅的编码体验。
+2.  **Unocss + Iconify**: 强大的组合，用于样式设计和灵活的图标管理方案。
+3.  **Tanstack Query**: 强大的异步状态管理库，用于数据获取、缓存和同步。
 4.  **vueuse**: 一系列常用的 vue hooks，增强您的组件逻辑。
 5.  **Pinia 状态管理**: 适用于 Vue 的简单、直观且类型安全的状态管理方案。
 
