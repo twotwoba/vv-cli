@@ -16,6 +16,7 @@ const templatePathVue = path.resolve(__dirname, "../template-vue")
 const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile")
 const templatePathReact = path.resolve(__dirname, "../template-react")
 const templatePathExtension = path.resolve(__dirname, "../template-extension")
+const templatePathUiLib = path.resolve(__dirname, "../template-ui-lib")
 
 // Read package.json to get version
 const packageJson = JSON.parse(
@@ -23,7 +24,7 @@ const packageJson = JSON.parse(
 ) as { version: string }
 
 // Template types
-type TemplateType = "vue" | "vue-mobile" | "react" | "extension"
+type TemplateType = "vue" | "vue-mobile" | "react" | "extension" | "ui-lib"
 
 interface TemplateChoice {
     name: string
@@ -34,14 +35,16 @@ const templateChoices: TemplateChoice[] = [
     { name: "Vue3 + Vite + Naive UI + Unocss (Desktop)", value: "vue" },
     { name: "Vue3 + Vite + Varlet + Unocss (Mobile)", value: "vue-mobile" },
     { name: "React19 + Vite + shadcn/ui + tailwindcss", value: "react" },
-    { name: "Chrome Extension + React19 + tailwindcss", value: "extension" }
+    { name: "Chrome Extension + React19 + tailwindcss", value: "extension" },
+    { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" }
 ]
 
 const templatePaths: Record<TemplateType, string> = {
     vue: templatePathVue,
     "vue-mobile": templatePathVueMobile,
     react: templatePathReact,
-    extension: templatePathExtension
+    extension: templatePathExtension,
+    "ui-lib": templatePathUiLib
 }
 
 /**
@@ -98,7 +101,7 @@ async function createProject(projectName?: string, options?: { template?: string
 
         // Check if template is provided via CLI option
         if (options?.template) {
-            const validTemplates: TemplateType[] = ["vue", "vue-mobile", "react", "extension"]
+            const validTemplates: TemplateType[] = ["vue", "vue-mobile", "react", "extension", "ui-lib"]
             if (!validTemplates.includes(options.template as TemplateType)) {
                 console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`))
                 process.exit(1)
@@ -174,6 +177,15 @@ async function createProject(projectName?: string, options?: { template?: string
             console.log(chalk.yellow("  4. Click 'Load unpacked' and select the 'dist' folder"))
             console.log(chalk.yellow("  5. Your extension will be loaded and ready for development!"))
         }
+
+        if (template === "ui-lib") {
+            console.log("\n📦 UI Component Library Development:")
+            console.log(chalk.yellow("  • 'pnpm dev' - Start the playground for component development"))
+            console.log(chalk.yellow("  • 'pnpm build' - Build the component library"))
+            console.log(chalk.yellow("  • 'pnpm build:all' - Build all packages"))
+            console.log(chalk.yellow("  • Components are in packages/components/src/"))
+            console.log(chalk.yellow("  • Test components in the playground/"))
+        }
         console.log("")
 
     } catch (error) {
@@ -189,12 +201,12 @@ async function createProject(projectName?: string, options?: { template?: string
 // Setup CLI
 program
     .name("vv")
-    .description("CLI tool for creating Vue3/React + Vite projects and Chrome Extensions")
+    .description("CLI tool for creating Vue3/React + Vite projects, Chrome Extensions, and UI Component Libraries")
     .version(packageJson.version)
 
 program
     .argument("[project-name]", "Name of the project")
-    .option("-t, --template <template>", "Template to use (vue, vue-mobile, react, extension)")
+    .option("-t, --template <template>", "Template to use (vue, vue-mobile, react, extension, ui-lib)")
     .action(createProject)
 
 program.parse()
