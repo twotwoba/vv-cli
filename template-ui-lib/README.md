@@ -93,8 +93,8 @@ app.use(YourUI)
 
 ```ts
 import { Button, Input } from 'your-ui-library'
-import 'your-ui-library/es/button/style.css'
-import 'your-ui-library/es/input/style.css'
+// You still need to import the full stylesheet
+import 'your-ui-library/style.css'
 ```
 
 ## License

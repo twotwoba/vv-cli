@@ -40,7 +40,8 @@ export default defineConfig({
           entryFileNames: '[name].mjs',
           preserveModules: true,
           preserveModulesRoot: 'src',
-          exports: 'named'
+          exports: 'named',
+          assetFileNames: 'style.css'
         },
         {
           format: 'cjs',
@@ -48,11 +49,12 @@ export default defineConfig({
           entryFileNames: '[name].js',
           preserveModules: true,
           preserveModulesRoot: 'src',
-          exports: 'named'
+          exports: 'named',
+          assetFileNames: 'style.css'
         }
       ]
     },
-    cssCodeSplit: true,
+    cssCodeSplit: false,
     emptyOutDir: true
   }
 })

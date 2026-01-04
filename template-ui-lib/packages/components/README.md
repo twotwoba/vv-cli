@@ -29,6 +29,8 @@ yarn add ui-component-library
 import { createApp } from 'vue'
 import App from './App.vue'
 import UiLibrary from 'ui-component-library'
+// Import styles
+import 'ui-component-library/style.css'
 
 const app = createApp(App)
 app.use(UiLibrary)
@@ -48,6 +50,8 @@ app.mount('#app')
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Button as UiButton, Input as UiInput } from 'ui-component-library'
+// Import styles
+import 'ui-component-library/style.css'
 
 const value = ref('')
 

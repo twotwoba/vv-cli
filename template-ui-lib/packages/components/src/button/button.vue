@@ -29,8 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-
 export interface ButtonProps {
     type?: "primary" | "success" | "warning" | "danger" | "info" | "default";
     size?: "large" | "default" | "small";

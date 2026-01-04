@@ -8,22 +8,26 @@
   "types": "./es/index.d.ts",
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "types": "./es/index.d.ts",
       "import": "./es/index.mjs",
       "require": "./lib/index.js"
     },
     "./button": {
+      "development": "./src/button/index.ts",
       "types": "./es/button/index.d.ts",
       "import": "./es/button/index.mjs",
       "require": "./lib/button/index.js"
     },
     "./input": {
+      "development": "./src/input/index.ts",
       "types": "./es/input/index.d.ts",
       "import": "./es/input/index.mjs",
       "require": "./lib/input/index.js"
     },
     "./es/*": "./es/*",
     "./lib/*": "./lib/*",
+    "./src/*": "./src/*",
     "./style.css": "./es/style.css"
   },
   "files": [
