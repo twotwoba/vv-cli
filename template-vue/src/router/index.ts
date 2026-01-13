@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import { basicRoutes } from '@/router/basic-routes'
 import { setupRouterGuards } from './guards'
 
-
 const basename = import.meta.env.VITE_ROUTE_BASENAME
 export const router = createRouter({
     history:

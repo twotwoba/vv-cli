@@ -28,7 +28,9 @@ const ShadowDom: React.FC<ShadowDomProps> = ({
 	const rootRef = useRef<Root | null>(null)
 
 	useEffect(() => {
-		if (!hostRef.current) return
+		if (!hostRef.current) {
+			return
+		}
 
 		// Create shadow root
 		try {
@@ -43,8 +45,8 @@ const ShadowDom: React.FC<ShadowDomProps> = ({
 
 			/* Inject Tailwind CSS styles (by @tailwindcss/cli compiles output) */
 			injectTailwindStyles(shadowRootRef.current)
-		} catch (error) {
-			console.error("Failed to create shadow DOM:", error)
+		} catch (_error) {
+			// Failed to create shadow DOM
 		}
 
 		return () => {

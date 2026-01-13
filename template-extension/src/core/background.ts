@@ -1,8 +1,6 @@
 /**
  * * background.ts - Service Worker for Chrome Extension
  */
-console.log("====== background script start ======")
-
 
 /**
  * onInstalled hook
@@ -28,15 +26,16 @@ chrome.action.onClicked.addListener(async (tab) => {
  * onCommand hook
  * This is triggered when keyboard shortcuts are used
  */
-chrome.commands.onCommand.addListener((command, tab) => {
-	console.log("Command received:", command, tab)
+chrome.commands.onCommand.addListener((_command, _tab) => {
+	// Handle keyboard shortcuts
+	// console.log("Command received:", command, tab)
 })
 
 /**
  * onMessage hook
  * This is triggered when messages are sent from content scripts or popup scripts
  */
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 	if (message.action === "XXXX_XXXX_XXXX") {
 		return true
 	}
@@ -48,5 +47,3 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
  * anything else you want to do on background script
  * ...
  */
-
-console.log("====== background script loaded ======")

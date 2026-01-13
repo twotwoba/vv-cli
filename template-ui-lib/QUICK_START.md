@@ -42,41 +42,41 @@ Create `packages/components/src/card/card.vue`:
 
 ```vue
 <template>
-  <div class="ui-card">
-    <div v-if="$slots.header" class="ui-card__header">
-      <slot name="header" />
+    <div class="ui-card">
+        <div v-if="$slots.header" class="ui-card__header">
+            <slot name="header" />
+        </div>
+        <div class="ui-card__body">
+            <slot />
+        </div>
     </div>
-    <div class="ui-card__body">
-      <slot />
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 export interface CardProps {
-  shadow?: 'always' | 'hover' | 'never'
+    shadow?: 'always' | 'hover' | 'never'
 }
 
 withDefaults(defineProps<CardProps>(), {
-  shadow: 'always'
+    shadow: 'always'
 })
 </script>
 
 <style scoped>
 .ui-card {
-  background: #fff;
-  border-radius: 4px;
-  border: 1px solid #ebeef5;
-  overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #ebeef5;
+    overflow: hidden;
 }
 
 .ui-card__header {
-  padding: 18px 20px;
-  border-bottom: 1px solid #ebeef5;
+    padding: 18px 20px;
+    border-bottom: 1px solid #ebeef5;
 }
 
 .ui-card__body {
-  padding: 20px;
+    padding: 20px;
 }
 </style>
 ```
@@ -90,7 +90,7 @@ import { App } from 'vue'
 import Card from './card.vue'
 
 Card.install = (app: App) => {
-  app.component('UiCard', Card)
+    app.component('UiCard', Card)
 }
 
 export { Card }
@@ -106,20 +106,20 @@ Edit `packages/components/src/index.ts`:
 import type { App } from 'vue'
 import { Button } from './button'
 import { Input } from './input'
-import { Card } from './card'  // Add this
+import { Card } from './card' // Add this
 
-const components = [Button, Input, Card]  // Add Card here
+const components = [Button, Input, Card] // Add Card here
 
 const install = (app: App) => {
-  components.forEach(component => {
-    app.component(component.name || '', component)
-  })
+    components.forEach((component) => {
+        app.component(component.name || '', component)
+    })
 }
 
-export { Button, Input, Card }  // Export Card
+export { Button, Input, Card } // Export Card
 
 export default {
-  install
+    install
 }
 ```
 
@@ -129,12 +129,12 @@ Edit `playground/src/App.vue` to test your new component:
 
 ```vue
 <template>
-  <ui-card>
-    <template #header>
-      <h3>Card Title</h3>
-    </template>
-    <p>Card content goes here</p>
-  </ui-card>
+    <ui-card>
+        <template #header>
+            <h3>Card Title</h3>
+        </template>
+        <p>Card content goes here</p>
+    </ui-card>
 </template>
 
 <script setup lang="ts">
@@ -151,6 +151,7 @@ pnpm build
 ```
 
 This creates:
+
 - `packages/components/es/` - ES modules (for modern bundlers)
 - `packages/components/lib/` - CommonJS (for older tools)
 - Type definitions (.d.ts files)
@@ -169,14 +170,14 @@ Edit `packages/components/package.json`:
 
 ```json
 {
-  "name": "@yourscope/your-ui-lib",
-  "version": "1.0.0",
-  "description": "Your awesome UI library",
-  "author": "Your Name <your.email@example.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/your-ui-lib"
-  }
+    "name": "@yourscope/your-ui-lib",
+    "version": "1.0.0",
+    "description": "Your awesome UI library",
+    "author": "Your Name <your.email@example.com>",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/your-ui-lib"
+    }
 }
 ```
 
@@ -214,4 +215,3 @@ npm publish --access public
 - pnpm workspaces: https://pnpm.io/workspaces
 
 Happy coding! 🎉
-

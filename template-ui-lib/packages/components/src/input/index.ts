@@ -2,7 +2,7 @@ import { App } from 'vue'
 import Input from './input.vue'
 
 Input.install = (app: App) => {
-  app.component('UiInput', Input)
+    app.component('UiInput', Input)
 }
 
 export { Input }

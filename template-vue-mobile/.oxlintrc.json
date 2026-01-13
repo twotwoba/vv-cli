@@ -1,0 +1,20 @@
+{
+    "plugins": ["vue", "typescript"],
+    "rules": {
+        "no-undef": "off",
+        "vue/multi-word-component-names": [
+            "error",
+            {
+                "ignores": ["index"]
+            }
+        ],
+        "typescript/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
+            }
+        ],
+        "typescript/no-explicit-any": "off"
+    }
+}

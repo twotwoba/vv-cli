@@ -13,7 +13,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import pxToViewport from 'postcss-px-to-viewport-8-plugin'
 
 /** @type {import('vite').UserConfig} */
-export default defineConfig(({  mode }) => {
+export default defineConfig(({ mode }) => {
     const isProd = mode === 'prod'
     const env = loadEnv(mode, process.cwd()) // add the third param '', expected all variables in env files
 
@@ -31,11 +31,7 @@ export default defineConfig(({  mode }) => {
             unocss(),
             AutoImport({
                 include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
-                imports: [
-                    'vue',
-                    'vue-router',
-                    'pinia'
-                ],
+                imports: ['vue', 'vue-router', 'pinia'],
                 resolvers: [VarletImportResolver({ autoImport: true })],
                 dts: path.join(__dirname, 'src', 'auto-imports.d.ts')
             }),
@@ -51,10 +47,10 @@ export default defineConfig(({  mode }) => {
             })
         ],
         css: {
-            transformer: "lightningcss",
-            lightningcss:{
+            transformer: 'lightningcss',
+            lightningcss: {
                 cssModules: {
-                    pattern: "[dir]_[name]--[hash:6]"
+                    pattern: '[dir]_[name]--[hash:6]'
                 }
             },
             postcss: {
@@ -77,22 +73,24 @@ export default defineConfig(({  mode }) => {
             // cssMinify: "lightningcss",
             // minify:"oxc",
             sourcemap: !isProd,
-            target: "esnext",
+            target: 'esnext',
             rolldownOptions: {
                 output: {
                     entryFileNames: 'assets/js/[name]-[hash].js',
                     chunkFileNames: 'assets/js/[name]-[hash].js',
-                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
                 },
-                minify: isProd ? {
-                    terserOptions: {
-                        compress: {
-                            drop_console: true,
-                            drop_debugger: true
-                        }
-                    }
-                } : false
-            },
+                minify: isProd
+                    ? {
+                          terserOptions: {
+                              compress: {
+                                  drop_console: true,
+                                  drop_debugger: true
+                              }
+                          }
+                      }
+                    : false
+            }
         },
         server: {
             host: '0.0.0.0',
@@ -100,7 +98,7 @@ export default defineConfig(({  mode }) => {
             proxy: {
                 '/api': {
                     target: env.VITE_PROXY_URL,
-                    rewrite: (path:string) => path.replace(/^\/api/, ''),
+                    rewrite: (path: string) => path.replace(/^\/api/, ''),
                     changeOrigin: true,
                     ws: false,
                     secure: false

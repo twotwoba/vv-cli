@@ -5,7 +5,11 @@
  *
  * github: https://github.com/vbenjs/vite-plugin-svg-icons/blob/main/README.md
  */
-const { prefix = 'icon', name, color } = defineProps<{ prefix?: string; name: string; color?: string }>()
+const {
+    prefix = 'icon',
+    name,
+    color
+} = defineProps<{ prefix?: string; name: string; color?: string }>()
 const symbolId = computed(() => `#${prefix}-${name}`)
 </script>
 <template>

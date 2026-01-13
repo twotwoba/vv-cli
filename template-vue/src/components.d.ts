@@ -24,11 +24,11 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const NaiveToolProviders: typeof import('./components/naive-tool-providers/index.vue')['default']
-  const NButton: typeof import('naive-ui')['NButton']
-  const NConfigProvider: typeof import('naive-ui')['NConfigProvider']
-  const NResult: typeof import('naive-ui')['NResult']
-  const RouterLink: typeof import('vue-router')['RouterLink']
-  const RouterView: typeof import('vue-router')['RouterView']
-  const SvgIcon: typeof import('./components/svg-icon/index.vue')['default']
+    const NaiveToolProviders: (typeof import('./components/naive-tool-providers/index.vue'))['default']
+    const NButton: (typeof import('naive-ui'))['NButton']
+    const NConfigProvider: (typeof import('naive-ui'))['NConfigProvider']
+    const NResult: (typeof import('naive-ui'))['NResult']
+    const RouterLink: (typeof import('vue-router'))['RouterLink']
+    const RouterView: (typeof import('vue-router'))['RouterView']
+    const SvgIcon: (typeof import('./components/svg-icon/index.vue'))['default']
 }

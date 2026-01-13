@@ -45,10 +45,7 @@
                 <div class="demo-block">
                     <h3>Basic Usage</h3>
                     <div class="demo-column">
-                        <ui-input
-                            v-model="inputValue"
-                            placeholder="Please input"
-                        />
+                        <ui-input v-model="inputValue" placeholder="Please input" />
                         <p>Value: {{ inputValue }}</p>
                     </div>
                 </div>
@@ -56,38 +53,18 @@
                 <div class="demo-block">
                     <h3>Sizes</h3>
                     <div class="demo-column">
-                        <ui-input
-                            v-model="inputValue"
-                            size="large"
-                            placeholder="Large"
-                        />
+                        <ui-input v-model="inputValue" size="large" placeholder="Large" />
                         <ui-input v-model="inputValue" placeholder="Default" />
-                        <ui-input
-                            v-model="inputValue"
-                            size="small"
-                            placeholder="Small"
-                        />
+                        <ui-input v-model="inputValue" size="small" placeholder="Small" />
                     </div>
                 </div>
 
                 <div class="demo-block">
                     <h3>States</h3>
                     <div class="demo-column">
-                        <ui-input
-                            v-model="inputValue"
-                            disabled
-                            placeholder="Disabled"
-                        />
-                        <ui-input
-                            v-model="inputValue"
-                            clearable
-                            placeholder="Clearable"
-                        />
-                        <ui-input
-                            v-model="inputValue"
-                            maxlength="10"
-                            placeholder="Max length 10"
-                        />
+                        <ui-input v-model="inputValue" disabled placeholder="Disabled" />
+                        <ui-input v-model="inputValue" clearable placeholder="Clearable" />
+                        <ui-input v-model="inputValue" maxlength="10" placeholder="Max length 10" />
                     </div>
                 </div>
             </section>
@@ -96,10 +73,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { Button as UiButton, Input as UiInput } from "ui-component-library";
+import { ref } from 'vue'
+import { Button as UiButton, Input as UiInput } from 'ui-component-library'
 
-const inputValue = ref("");
+const inputValue = ref('')
 </script>
 
 <style scoped>

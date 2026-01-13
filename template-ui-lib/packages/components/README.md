@@ -41,10 +41,8 @@ app.mount('#app')
 
 ```vue
 <template>
-  <ui-button type="primary" @click="handleClick">
-    Click Me
-  </ui-button>
-  <ui-input v-model="value" placeholder="Enter text" />
+    <ui-button type="primary" @click="handleClick"> Click Me </ui-button>
+    <ui-input v-model="value" placeholder="Enter text" />
 </template>
 
 <script setup lang="ts">
@@ -56,7 +54,7 @@ import 'ui-component-library/style.css'
 const value = ref('')
 
 const handleClick = () => {
-  console.log('Button clicked!')
+    console.log('Button clicked!')
 }
 </script>
 ```
@@ -118,12 +116,7 @@ A flexible input component with various features.
 **Example:**
 
 ```vue
-<ui-input
-  v-model="username"
-  placeholder="Enter username"
-  clearable
-  maxlength="20"
-/>
+<ui-input v-model="username" placeholder="Enter username" clearable maxlength="20" />
 ```
 
 ## TypeScript Support
@@ -134,8 +127,8 @@ This library is written in TypeScript and provides full type definitions.
 import type { ButtonProps, InputProps } from 'ui-component-library'
 
 const buttonProps: ButtonProps = {
-  type: 'primary',
-  size: 'large'
+    type: 'primary',
+    size: 'large'
 }
 ```
 
@@ -147,4 +140,3 @@ const buttonProps: ButtonProps = {
 ## License
 
 MIT
-

@@ -15,5 +15,3 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 	// keep the message channel open
 	return true
 })
-
-console.log("Content script has loaded in:", window.location.href)

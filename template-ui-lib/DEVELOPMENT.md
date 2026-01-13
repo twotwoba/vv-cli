@@ -61,7 +61,7 @@ import { App } from 'vue'
 import Card from './card.vue'
 
 Card.install = (app: App) => {
-  app.component('UiCard', Card)
+    app.component('UiCard', Card)
 }
 
 export { Card }
@@ -78,6 +78,7 @@ pnpm build
 ```
 
 This will generate:
+
 - `packages/components/es/` - ES modules
 - `packages/components/lib/` - CommonJS modules
 - Type definitions (.d.ts files)
@@ -131,14 +132,14 @@ Edit `packages/components/package.json`:
 
 ```json
 {
-  "name": "your-ui-library-name",
-  "version": "1.0.0",
-  "description": "Your library description",
-  "author": "Your Name",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/your-repo"
-  }
+    "name": "your-ui-library-name",
+    "version": "1.0.0",
+    "description": "Your library description",
+    "author": "Your Name",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/your-repo"
+    }
 }
 ```
 
@@ -190,10 +191,10 @@ import { Button, Input } from 'your-ui-library-name'
 
 // In component
 export default {
-  components: {
-    Button,
-    Input
-  }
+    components: {
+        Button,
+        Input
+    }
 }
 ```
 
@@ -225,4 +226,3 @@ Make sure all packages have the correct TypeScript configuration and run:
 ```bash
 pnpm type-check
 ```
-

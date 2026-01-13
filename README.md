@@ -27,7 +27,7 @@ Based on the official [React-TS](https://github.com/vitejs/vite/tree/main/packag
 3.  **Tanstack Query**: Powerful asynchronous state management for data fetching, caching, and synchronization.
 4.  **useHooks**: A collection of frequently used, battle-tested React Hooks to enhance your component logic.
 5.  **Zustand State Management**: A small, fast, and scalable state management solution for React.
-6.  **Biome**：replace eslint&prettier，smoother development experience。
+6.  **Oxc**：replace eslint&prettier，smoother development experience。
 
 ---
 

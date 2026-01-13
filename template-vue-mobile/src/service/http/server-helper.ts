@@ -85,4 +85,3 @@ export function processData<T = unknown>(response: ApiResponse<T>): T {
 export function isFetchError(error: unknown): error is FetchError {
     return error instanceof FetchError
 }
-

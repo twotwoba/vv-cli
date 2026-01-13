@@ -1,29 +1,28 @@
 {
-  "name": "playground",
-  "version": "0.0.1",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite --mode dev",
-    "build": "vite build --mode prod",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "ui-component-library": "workspace:*",
-    "vue": "^3.5.21"
-  },
-  "devDependencies": {
-    "@types/node": "^22.18.1",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "@vitejs/plugin-vue-jsx": "^5.1.2",
-    "typescript": "^5.9.2",
-    "vite": "^8.0.0",
-    "vue-tsc": "^2.2.12"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "8.0.0-beta.0"
+    "name": "playground",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite --mode dev",
+        "build": "vite build --mode prod",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "ui-component-library": "workspace:*",
+        "vue": "^3.5.21"
+    },
+    "devDependencies": {
+        "@types/node": "^22.18.1",
+        "@vitejs/plugin-vue": "^6.0.2",
+        "@vitejs/plugin-vue-jsx": "^5.1.2",
+        "typescript": "^5.9.2",
+        "vite": "^8.0.0",
+        "vue-tsc": "^2.2.12"
+    },
+    "pnpm": {
+        "overrides": {
+            "vite": "8.0.0-beta.0"
+        }
     }
-  }
 }
-

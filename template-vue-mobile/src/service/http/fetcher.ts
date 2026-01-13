@@ -97,7 +97,13 @@ export const fetcher = async <T = unknown>(
     endpoint: string,
     options: RequestConfig & FetcherOptions = {}
 ): Promise<T> => {
-    const { baseURL = import.meta.env.VITE_API_URL, method = 'GET', params, body, ...rest } = options
+    const {
+        baseURL = import.meta.env.VITE_API_URL,
+        method = 'GET',
+        params,
+        body,
+        ...rest
+    } = options
 
     if (!endpoint) {
         throw new FetchError('Endpoint is required', 400)
@@ -150,4 +156,3 @@ export const fetcher = async <T = unknown>(
 }
 
 export { FetchError, isFetchError } from './server-helper'
-

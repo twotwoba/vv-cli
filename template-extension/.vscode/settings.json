@@ -1,14 +1,12 @@
 {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.organizeImports.biome": "explicit",
-        "source.fixAll.biome": "explicit"
-    },
-    "tailwindCSS.experimental.classRegex": [
-        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-    ],
-    "files.associations": {
-        "*.css": "tailwindcss",
-    }
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.oxc": "always"
+	},
+	"tailwindCSS.experimental.classRegex": [
+		["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+	],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
 }

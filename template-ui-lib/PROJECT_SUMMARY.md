@@ -59,6 +59,7 @@ template-ui-lib/
 ### 1. Vite 8 with Rolldown (Beta)
 
 The template uses Vite 8's new Rolldown bundler for:
+
 - ⚡️ Faster builds (10x faster than Rollup)
 - 🎯 Better tree-shaking
 - 📦 Smaller bundle sizes
@@ -85,6 +86,7 @@ build: {
 ```
 
 This generates:
+
 - **ES modules** (`es/`) for modern bundlers (tree-shakable)
 - **CommonJS** (`lib/`) for older tools
 - **Type definitions** (`.d.ts`) for TypeScript support
@@ -95,19 +97,24 @@ The library's `package.json` uses modern exports field:
 
 ```json
 {
-  "exports": {
-    ".": {
-      "types": "./es/index.d.ts",
-      "import": "./es/index.mjs",
-      "require": "./lib/index.js"
-    },
-    "./button": { /* individual component export */ },
-    "./input": { /* individual component export */ }
-  }
+    "exports": {
+        ".": {
+            "types": "./es/index.d.ts",
+            "import": "./es/index.mjs",
+            "require": "./lib/index.js"
+        },
+        "./button": {
+            /* individual component export */
+        },
+        "./input": {
+            /* individual component export */
+        }
+    }
 }
 ```
 
 This enables:
+
 - Full import: `import UI from 'your-lib'`
 - On-demand import: `import { Button } from 'your-lib'`
 - Direct import: `import Button from 'your-lib/button'`
@@ -115,6 +122,7 @@ This enables:
 ### 4. Monorepo Structure
 
 Using pnpm workspace for:
+
 - 🔗 Shared dependencies
 - 🚀 Fast installs with hard links
 - 📦 Workspace protocol (`workspace:*`)
@@ -123,6 +131,7 @@ Using pnpm workspace for:
 ### 5. Development Playground
 
 The playground package:
+
 - Uses the library via `workspace:*` dependency
 - Provides hot module replacement (HMR)
 - Allows real-time component testing
@@ -185,6 +194,7 @@ component-name/
 ```
 
 The `index.ts` provides:
+
 - Named export: `export { ComponentName }`
 - Default export: `export default ComponentName`
 - Type export: `export type { ComponentNameProps }`
@@ -257,4 +267,3 @@ import Input from 'your-ui-library/input'
 5. Publish: `npm publish`
 
 Enjoy building your UI library! 🎉
-

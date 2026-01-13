@@ -46,7 +46,10 @@ interface QueryOptions<TParams> {
  * const { data, isLoading } = useUser()
  * const { data } = useUserById({ params: { id: '123' } })
  */
-export const createQuery = <TData = unknown, TParams extends Record<string, unknown> = Record<string, unknown>>(
+export const createQuery = <
+    TData = unknown,
+    TParams extends Record<string, unknown> = Record<string, unknown>
+>(
     endpoint: string,
     baseOptions?: FetcherOptions
 ) => {
@@ -55,7 +58,9 @@ export const createQuery = <TData = unknown, TParams extends Record<string, unkn
         const enabled = computed(() => toValue(options?.enabled) !== false)
 
         return useQuery<TData, FetchError>({
-            queryKey: computed(() => (params.value ? [endpoint, params.value] : [endpoint])) as unknown as QueryKey,
+            queryKey: computed(() =>
+                params.value ? [endpoint, params.value] : [endpoint]
+            ) as unknown as QueryKey,
             queryFn: () =>
                 fetcher<TData>(endpoint, {
                     ...baseOptions,

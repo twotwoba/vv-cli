@@ -36,25 +36,27 @@ src/
 ## Getting Started
 
 1. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
+
+    ```bash
+    pnpm install
+    ```
 
 2. **Start development**
-   ```bash
-   pnpm dev
-   ```
+
+    ```bash
+    pnpm dev
+    ```
 
 3. **Load extension in Chrome**
-   - Open Chrome and navigate to `chrome://extensions/`
-   - Enable "Developer mode" in the top right
-   - Click "Load unpacked"
-   - Select the `dist` folder from your project
+    - Open Chrome and navigate to `chrome://extensions/`
+    - Enable "Developer mode" in the top right
+    - Click "Load unpacked"
+    - Select the `dist` folder from your project
 
 4. **Build for production**
-   ```bash
-   pnpm build
-   ```
+    ```bash
+    pnpm build
+    ```
 
 ## Development
 
@@ -68,16 +70,16 @@ src/
 ### Configuration
 
 1. **Update Extension Details**
-   - Edit `package.json` for basic info (name, description, version)
-   - Edit `manifest.config.ts` for Chrome extension specific settings
+    - Edit `package.json` for basic info (name, description, version)
+    - Edit `manifest.config.ts` for Chrome extension specific settings
 
 2. **Permissions**
-   - Modify permissions in `manifest.config.ts`
-   - See [Chrome Extension Permissions](https://developer.chrome.com/docs/extensions/reference/permissions/)
+    - Modify permissions in `manifest.config.ts`
+    - See [Chrome Extension Permissions](https://developer.chrome.com/docs/extensions/reference/permissions/)
 
 3. **Icons**
-   - Replace icons in `public/` folder
-   - Supported sizes: 16x16, 32x32, 64x64 pixels
+    - Replace icons in `public/` folder
+    - Supported sizes: 16x16, 32x32, 64x64 pixels
 
 ### Components
 

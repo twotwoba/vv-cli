@@ -8,8 +8,8 @@
                 'is-disabled': disabled,
                 'is-loading': loading,
                 'is-round': round,
-                'is-circle': circle,
-            },
+                'is-circle': circle
+            }
         ]"
         :disabled="disabled || loading"
         @click="handleClick"
@@ -30,31 +30,31 @@
 
 <script setup lang="ts">
 export interface ButtonProps {
-    type?: "primary" | "success" | "warning" | "danger" | "info" | "default";
-    size?: "large" | "default" | "small";
-    disabled?: boolean;
-    loading?: boolean;
-    round?: boolean;
-    circle?: boolean;
+    type?: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default'
+    size?: 'large' | 'default' | 'small'
+    disabled?: boolean
+    loading?: boolean
+    round?: boolean
+    circle?: boolean
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-    type: "default",
-    size: "default",
+    type: 'default',
+    size: 'default',
     disabled: false,
     loading: false,
     round: false,
-    circle: false,
-});
+    circle: false
+})
 
 const emit = defineEmits<{
-    click: [event: MouseEvent];
-}>();
+    click: [event: MouseEvent]
+}>()
 
 const handleClick = (event: MouseEvent) => {
-    if (props.disabled || props.loading) return;
-    emit("click", event);
-};
+    if (props.disabled || props.loading) return
+    emit('click', event)
+}
 </script>
 
 <style scoped>

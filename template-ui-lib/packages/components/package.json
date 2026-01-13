@@ -1,74 +1,73 @@
 {
-  "name": "ui-component-library",
-  "version": "0.0.1",
-  "description": "A modern Vue 3 component library built with Vite 8 and TypeScript",
-  "type": "module",
-  "main": "./lib/index.js",
-  "module": "./es/index.mjs",
-  "types": "./es/index.d.ts",
-  "exports": {
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./es/index.d.ts",
-      "import": "./es/index.mjs",
-      "require": "./lib/index.js"
+    "name": "ui-component-library",
+    "version": "0.0.1",
+    "description": "A modern Vue 3 component library built with Vite 8 and TypeScript",
+    "keywords": [
+        "component",
+        "library",
+        "ui",
+        "vue",
+        "vue3"
+    ],
+    "license": "MIT",
+    "author": "",
+    "files": [
+        "es",
+        "lib",
+        "README.md"
+    ],
+    "type": "module",
+    "sideEffects": [
+        "*.css",
+        "*.vue"
+    ],
+    "main": "./lib/index.js",
+    "module": "./es/index.mjs",
+    "types": "./es/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./es/index.d.ts",
+            "development": "./src/index.ts",
+            "import": "./es/index.mjs",
+            "require": "./lib/index.js"
+        },
+        "./button": {
+            "types": "./es/button/index.d.ts",
+            "development": "./src/button/index.ts",
+            "import": "./es/button/index.mjs",
+            "require": "./lib/button/index.js"
+        },
+        "./input": {
+            "types": "./es/input/index.d.ts",
+            "development": "./src/input/index.ts",
+            "import": "./es/input/index.mjs",
+            "require": "./lib/input/index.js"
+        },
+        "./es/*": "./es/*",
+        "./lib/*": "./lib/*",
+        "./src/*": "./src/*",
+        "./style.css": "./es/style.css"
     },
-    "./button": {
-      "development": "./src/button/index.ts",
-      "types": "./es/button/index.d.ts",
-      "import": "./es/button/index.mjs",
-      "require": "./lib/button/index.js"
+    "scripts": {
+        "dev": "vite build --watch --mode development",
+        "build": "pnpm type-check && vite build",
+        "type-check": "vue-tsc --noEmit"
     },
-    "./input": {
-      "development": "./src/input/index.ts",
-      "types": "./es/input/index.d.ts",
-      "import": "./es/input/index.mjs",
-      "require": "./lib/input/index.js"
+    "devDependencies": {
+        "@types/node": "^22.18.1",
+        "@vitejs/plugin-vue": "^6.0.2",
+        "@vitejs/plugin-vue-jsx": "^5.1.2",
+        "typescript": "^5.9.2",
+        "vite": "^8.0.0",
+        "vue": "^3.5.21",
+        "vue-tsc": "^2.2.12"
     },
-    "./es/*": "./es/*",
-    "./lib/*": "./lib/*",
-    "./src/*": "./src/*",
-    "./style.css": "./es/style.css"
-  },
-  "files": [
-    "es",
-    "lib",
-    "README.md"
-  ],
-  "sideEffects": [
-    "*.css",
-    "*.vue"
-  ],
-  "scripts": {
-    "dev": "vite build --watch --mode development",
-    "build": "pnpm type-check && vite build",
-    "type-check": "vue-tsc --noEmit"
-  },
-  "keywords": [
-    "vue",
-    "vue3",
-    "component",
-    "ui",
-    "library"
-  ],
-  "author": "",
-  "license": "MIT",
-  "peerDependencies": {
-    "vue": "^3.5.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.18.1",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "@vitejs/plugin-vue-jsx": "^5.1.2",
-    "typescript": "^5.9.2",
-    "vite": "^8.0.0",
-    "vue": "^3.5.21",
-    "vue-tsc": "^2.2.12"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "8.0.0-beta.0"
+    "peerDependencies": {
+        "vue": "^3.5.0"
+    },
+    "pnpm": {
+        "overrides": {
+            "vite": "8.0.0-beta.0"
+        }
     }
-  }
 }
-

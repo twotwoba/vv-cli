@@ -1,13 +1,17 @@
 {
     "name": "vite-vue3-template",
-    "private": true,
     "version": "0.0.0",
+    "private": true,
     "type": "module",
     "scripts": {
         "dev": "vite --mode dev",
         "build": "vite build --mode prod",
         "type-check": "tsc --noEmit",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "lint": "oxlint -c .oxlintrc.json --vue-plugin",
+        "lint:fix": "oxlint -c .oxlintrc.json --vue-plugin --fix",
+        "format": "oxfmt -c .oxfmtrc.json --write .",
+        "format:check": "oxfmt -c .oxfmtrc.json --check ."
     },
     "dependencies": {
         "@tanstack/vue-query": "^5.92.1",
@@ -22,22 +26,15 @@
         "vue-router": "^4.5.1"
     },
     "devDependencies": {
-        "@eslint/js": "^9.35.0",
         "@types/node": "^22.18.1",
         "@vitejs/plugin-vue": "^6.0.2",
         "@vitejs/plugin-vue-jsx": "^5.1.2",
-        "eslint": "^9.35.0",
-        "eslint-plugin-vue": "^9.33.0",
-        "globals": "^15.15.0",
         "lightningcss": "^1.30.2",
         "oxc": "^1.0.1",
+        "oxfmt": "^0.24.0",
+        "oxlint": "^1.39.0",
         "postcss": "^8.5.6",
-        "postcss-html": "^1.8.0",
-        "stylelint": "^16.24.0",
-        "stylelint-config-recess-order": "^5.1.1",
-        "stylelint-config-standard": "^36.0.1",
         "typescript": "^5.9.2",
-        "typescript-eslint": "^8.42.0",
         "unplugin-auto-import": "^20.3.0",
         "unplugin-icons": "^22.5.0",
         "unplugin-vue-components": "^30.0.0",

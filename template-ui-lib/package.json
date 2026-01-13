@@ -1,24 +1,29 @@
 {
-  "name": "ui-component-library",
-  "version": "0.0.1",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "pnpm -C playground dev",
-    "build": "pnpm -C packages/components build",
-    "build:all": "pnpm -r --filter='./packages/*' build",
-    "type-check": "pnpm -r --filter='./packages/*' type-check",
-    "clean": "pnpm -r exec rm -rf dist es lib node_modules"
-  },
-  "devDependencies": {
-    "@types/node": "^22.18.1",
-    "typescript": "^5.9.2",
-    "vite": "^8.0.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "8.0.0-beta.0"
+    "name": "ui-component-library",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "pnpm -C playground dev",
+        "build": "pnpm -C packages/components build",
+        "build:all": "pnpm -r --filter='./packages/*' build",
+        "type-check": "pnpm -r --filter='./packages/*' type-check",
+        "clean": "pnpm -r exec rm -rf dist es lib node_modules",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
+        "format": "oxfmt --write .",
+        "format:check": "oxfmt --check ."
+    },
+    "devDependencies": {
+        "@types/node": "^22.18.1",
+        "oxfmt": "^0.24.0",
+        "oxlint": "^1.39.0",
+        "typescript": "^5.9.2",
+        "vite": "^8.0.0"
+    },
+    "pnpm": {
+        "overrides": {
+            "vite": "8.0.0-beta.0"
+        }
     }
-  }
 }
-

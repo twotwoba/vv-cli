@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp } from 'vue'
 import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
 import App from './App.vue'
 import 'virtual:svg-icons-register'
@@ -45,8 +45,8 @@ async function bootstrap() {
 
     if (import.meta.env.MODE === 'dev') {
         import('vconsole').then((module) => {
-            new module.default();
-        });
+            new module.default()
+        })
     }
 }
 

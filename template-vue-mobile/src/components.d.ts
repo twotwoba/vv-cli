@@ -23,10 +23,10 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const RouterLink: typeof import('vue-router')['RouterLink']
-  const RouterView: typeof import('vue-router')['RouterView']
-  const SvgIcon: typeof import('./components/svg-icon/index.vue')['default']
-  const VarButton: typeof import('@varlet/ui')['_ButtonComponent']
-  const VarResult: typeof import('@varlet/ui')['_ResultComponent']
-  const VarSpace: typeof import('@varlet/ui')['_SpaceComponent']
+    const RouterLink: (typeof import('vue-router'))['RouterLink']
+    const RouterView: (typeof import('vue-router'))['RouterView']
+    const SvgIcon: (typeof import('./components/svg-icon/index.vue'))['default']
+    const VarButton: (typeof import('@varlet/ui'))['_ButtonComponent']
+    const VarResult: (typeof import('@varlet/ui'))['_ResultComponent']
+    const VarSpace: (typeof import('@varlet/ui'))['_SpaceComponent']
 }

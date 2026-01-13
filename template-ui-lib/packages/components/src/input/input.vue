@@ -5,8 +5,8 @@
             `ui-input--${size}`,
             {
                 'is-disabled': disabled,
-                'is-clearable': clearable && modelValue,
-            },
+                'is-clearable': clearable && modelValue
+            }
         ]"
     >
         <input
@@ -23,79 +23,73 @@
             @focus="handleFocus"
             @blur="handleBlur"
         />
-        <span
-            v-if="clearable && modelValue"
-            class="ui-input__clear"
-            @click="handleClear"
-        >
-            ×
-        </span>
+        <span v-if="clearable && modelValue" class="ui-input__clear" @click="handleClear"> × </span>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
 export interface InputProps {
-    modelValue?: string | number;
-    type?: string;
-    placeholder?: string;
-    disabled?: boolean;
-    readonly?: boolean;
-    clearable?: boolean;
-    maxlength?: number;
-    size?: "large" | "default" | "small";
+    modelValue?: string | number
+    type?: string
+    placeholder?: string
+    disabled?: boolean
+    readonly?: boolean
+    clearable?: boolean
+    maxlength?: number
+    size?: 'large' | 'default' | 'small'
 }
 
 const props = withDefaults(defineProps<InputProps>(), {
-    type: "text",
-    placeholder: "",
+    type: 'text',
+    placeholder: '',
     disabled: false,
     readonly: false,
     clearable: false,
-    size: "default",
-});
+    size: 'default'
+})
 
 const emit = defineEmits<{
-    "update:modelValue": [value: string];
-    input: [value: string];
-    change: [value: string];
-    focus: [event: FocusEvent];
-    blur: [event: FocusEvent];
-    clear: [];
-}>();
+    'update:modelValue': [value: string]
+    input: [value: string]
+    change: [value: string]
+    focus: [event: FocusEvent]
+    blur: [event: FocusEvent]
+    clear: []
+}>()
 
-const inputRef = ref<HTMLInputElement>();
+const inputRef = ref<HTMLInputElement>()
 
 const handleInput = (event: Event) => {
-    const value = (event.target as HTMLInputElement).value;
-    emit("update:modelValue", value);
-    emit("input", value);
-};
+    const value = (event.target as HTMLInputElement).value
+    emit('update:modelValue', value)
+    emit('input', value)
+}
 
 const handleChange = (event: Event) => {
-    const value = (event.target as HTMLInputElement).value;
-    emit("change", value);
-};
+    const value = (event.target as HTMLInputElement).value
+    emit('change', value)
+}
 
 const handleFocus = (event: FocusEvent) => {
-    emit("focus", event);
-};
+    emit('focus', event)
+}
 
 const handleBlur = (event: FocusEvent) => {
-    emit("blur", event);
-};
+    emit('blur', event)
+}
 
 const handleClear = () => {
-    emit("update:modelValue", "");
-    emit("clear");
-    inputRef.value?.focus();
-};
+    emit('update:modelValue', '')
+    emit('clear')
+    inputRef.value?.focus()
+}
 
 defineExpose({
     focus: () => inputRef.value?.focus(),
-    blur: () => inputRef.value?.blur(),
-});
+    blur: () => inputRef.value?.blur()
+})
 </script>
 
 <style lang="css" scoped>
