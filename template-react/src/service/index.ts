@@ -1,23 +1,23 @@
 import {
-	useQuery,
-	useMutation,
-	useInfiniteQuery,
-	type UseQueryOptions,
-	type UseMutationOptions,
-	type QueryKey
+    useQuery,
+    useMutation,
+    useInfiniteQuery,
+    type UseQueryOptions,
+    type UseMutationOptions,
+    type QueryKey
 } from "@tanstack/react-query"
-import { FetchError } from "./server-helper"
-import { fetcher, FetcherOptions } from "./fecher"
+import type { FetchError } from "./server-helper"
+import { fetcher, type FetcherOptions } from "./fecher"
 
 // ============================================================================
 // Query Factory - 用于创建查询 hooks
 // ============================================================================
 
 type QueryOptions<TData, TParams> = Omit<
-	UseQueryOptions<TData, FetchError, TData, QueryKey>,
-	"queryKey" | "queryFn"
+    UseQueryOptions<TData, FetchError, TData, QueryKey>,
+    "queryKey" | "queryFn"
 > & {
-	params?: TParams
+    params?: TParams
 }
 
 /**
@@ -37,24 +37,27 @@ type QueryOptions<TData, TParams> = Omit<
  * const { data, isLoading } = useUser()
  * const { data } = useUserById({ params: { id: '123' } })
  */
-export const createQuery = <TData = unknown, TParams extends Record<string, unknown> = Record<string, unknown>>(
-	endpoint: string,
-	baseOptions?: FetcherOptions
+export const createQuery = <
+    TData = unknown,
+    TParams extends Record<string, unknown> = Record<string, unknown>
+>(
+    endpoint: string,
+    baseOptions?: FetcherOptions
 ) => {
-	return (options?: QueryOptions<TData, TParams>) => {
-		const { params, ...queryOptions } = options ?? {}
+    return (options?: QueryOptions<TData, TParams>) => {
+        const { params, ...queryOptions } = options ?? {}
 
-		return useQuery<TData, FetchError>({
-			queryKey: params ? [endpoint, params] : [endpoint],
-			queryFn: () =>
-				fetcher<TData>(endpoint, {
-					...baseOptions,
-					method: "GET",
-					params: params as Record<string, unknown>
-				}),
-			...queryOptions
-		})
-	}
+        return useQuery<TData, FetchError>({
+            queryKey: params ? [endpoint, params] : [endpoint],
+            queryFn: () =>
+                fetcher<TData>(endpoint, {
+                    ...baseOptions,
+                    method: "GET",
+                    params: params as Record<string, unknown>
+                }),
+            ...queryOptions
+        })
+    }
 }
 
 // ============================================================================
@@ -62,8 +65,8 @@ export const createQuery = <TData = unknown, TParams extends Record<string, unkn
 // ============================================================================
 
 type MutationOptions<TData, TBody> = Omit<
-	UseMutationOptions<TData, FetchError, TBody>,
-	"mutationFn"
+    UseMutationOptions<TData, FetchError, TBody>,
+    "mutationFn"
 >
 
 /**
@@ -86,21 +89,21 @@ type MutationOptions<TData, TBody> = Omit<
  * mutate({ name: 'John', email: 'john@example.com' })
  */
 export const createMutation = <TData = unknown, TBody = unknown>(
-	endpoint: string,
-	method: "POST" | "PUT" | "DELETE" | "PATCH" = "POST",
-	baseOptions?: Omit<FetcherOptions, "method">
+    endpoint: string,
+    method: "POST" | "PUT" | "DELETE" | "PATCH" = "POST",
+    baseOptions?: Omit<FetcherOptions, "method">
 ) => {
-	return (options?: MutationOptions<TData, TBody>) => {
-		return useMutation<TData, FetchError, TBody>({
-			mutationFn: (body: TBody) =>
-				fetcher<TData>(endpoint, {
-					...baseOptions,
-					method,
-					body: body as Record<string, unknown>
-				}),
-			...options
-		})
-	}
+    return (options?: MutationOptions<TData, TBody>) => {
+        return useMutation<TData, FetchError, TBody>({
+            mutationFn: (body: TBody) =>
+                fetcher<TData>(endpoint, {
+                    ...baseOptions,
+                    method,
+                    body: body as Record<string, unknown>
+                }),
+            ...options
+        })
+    }
 }
 
 // ============================================================================
@@ -108,15 +111,15 @@ export const createMutation = <TData = unknown, TBody = unknown>(
 // ============================================================================
 
 interface PageParam {
-	current: number
-	pageSize?: number
+    current: number
+    pageSize?: number
 }
 
 interface InfiniteQueryOptions<TData, TParams> {
-	params?: TParams
-	pageSize?: number
-	enabled?: boolean
-	getNextPageParam?: (lastPage: TData, allPages: TData[]) => PageParam | undefined
+    params?: TParams
+    pageSize?: number
+    enabled?: boolean
+    getNextPageParam?: (lastPage: TData, allPages: TData[]) => PageParam | undefined
 }
 
 /**
@@ -138,44 +141,44 @@ interface InfiniteQueryOptions<TData, TParams> {
  * })
  */
 export const createInfiniteQuery = <
-	TData = unknown,
-	TParams extends Record<string, unknown> = Record<string, unknown>
+    TData = unknown,
+    TParams extends Record<string, unknown> = Record<string, unknown>
 >(
-	endpoint: string,
-	baseOptions?: FetcherOptions
+    endpoint: string,
+    baseOptions?: FetcherOptions
 ) => {
-	return (options?: InfiniteQueryOptions<TData, TParams>) => {
-		const { params, pageSize = 10, getNextPageParam, ...queryOptions } = options ?? {}
+    return (options?: InfiniteQueryOptions<TData, TParams>) => {
+        const { params, pageSize = 10, getNextPageParam, ...queryOptions } = options ?? {}
 
-		return useInfiniteQuery<TData, FetchError, TData, QueryKey, PageParam>({
-			queryKey: params ? [endpoint, "infinite", params] : [endpoint, "infinite"],
-			queryFn: ({ pageParam }) =>
-				fetcher<TData>(endpoint, {
-					...baseOptions,
-					method: "GET",
-					params: {
-						...params,
-						current: pageParam.current,
-						pageSize: pageParam.pageSize ?? pageSize
-					} as Record<string, unknown>
-				}),
-			initialPageParam: { current: 1, pageSize },
-			getNextPageParam:
-				getNextPageParam ??
-				((lastPage, allPages) => {
-					// 默认实现：假设返回数据有 total 字段
-					const page = lastPage as { total?: number; list?: unknown[] }
-					const loadedCount = allPages.reduce((acc, p) => {
-						const items = (p as { list?: unknown[] }).list
-						return acc + (items?.length ?? 0)
-					}, 0)
+        return useInfiniteQuery<TData, FetchError, TData, QueryKey, PageParam>({
+            queryKey: params ? [endpoint, "infinite", params] : [endpoint, "infinite"],
+            queryFn: ({ pageParam }) =>
+                fetcher<TData>(endpoint, {
+                    ...baseOptions,
+                    method: "GET",
+                    params: {
+                        ...params,
+                        current: pageParam.current,
+                        pageSize: pageParam.pageSize ?? pageSize
+                    } as Record<string, unknown>
+                }),
+            initialPageParam: { current: 1, pageSize },
+            getNextPageParam:
+                getNextPageParam ??
+                ((lastPage, allPages) => {
+                    // 默认实现：假设返回数据有 total 字段
+                    const page = lastPage as { total?: number; list?: unknown[] }
+                    const loadedCount = allPages.reduce((acc, p) => {
+                        const items = (p as { list?: unknown[] }).list
+                        return acc + (items?.length ?? 0)
+                    }, 0)
 
-					if (page.total && loadedCount < page.total) {
-						return { current: allPages.length + 1, pageSize }
-					}
-					return undefined
-				}),
-			...queryOptions
-		})
-	}
+                    if (page.total && loadedCount < page.total) {
+                        return { current: allPages.length + 1, pageSize }
+                    }
+                    return undefined
+                }),
+            ...queryOptions
+        })
+    }
 }

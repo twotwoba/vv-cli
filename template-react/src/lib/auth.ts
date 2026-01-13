@@ -9,8 +9,8 @@ import { AUTH_KEY } from "./global-keys"
  * @returns 如果是跳过认证的接口返回 true，否则返回 false
  */
 export const isPublicApi = (url: string): boolean => {
-	// 以 /pass/ 开头的所有接口都跳过认证检查
-	return url.includes("/pass/") || url.startsWith("/pass")
+    // 以 /pass/ 开头的所有接口都跳过认证检查
+    return url.includes("/pass/") || url.startsWith("/pass")
 }
 
 /**
@@ -18,8 +18,8 @@ export const isPublicApi = (url: string): boolean => {
  * @returns 如果用户已登录返回 true，否则返回 false
  */
 export const isUserAuthenticated = (): boolean => {
-	const token = localStorage.getItem(AUTH_KEY)
-	return !!token && token.trim() !== ""
+    const token = localStorage.getItem(AUTH_KEY)
+    return !!token && token.trim() !== ""
 }
 
 /**
@@ -27,7 +27,7 @@ export const isUserAuthenticated = (): boolean => {
  * @returns 返回认证 token，如果不存在返回空字符串
  */
 export const getAuthToken = (): string => {
-	return localStorage.getItem(AUTH_KEY) || ""
+    return localStorage.getItem(AUTH_KEY) || ""
 }
 
 /**
@@ -35,12 +35,12 @@ export const getAuthToken = (): string => {
  * @param token 认证 token
  */
 export const setAuthToken = (token: string): void => {
-	localStorage.setItem(AUTH_KEY, token)
+    localStorage.setItem(AUTH_KEY, token)
 }
 
 /**
  * 清除认证 token
  */
 export const clearAuthToken = (): void => {
-	localStorage.removeItem(AUTH_KEY)
+    localStorage.removeItem(AUTH_KEY)
 }

@@ -4,17 +4,17 @@ import { lazy, Suspense } from "react"
  * dynamically load route page
  */
 const loadPage = (
-	importFn: () => Promise<{
-		default: React.ComponentType<any>
-	}>
+    importFn: () => Promise<{
+        default: React.ComponentType<any>
+    }>
 ) => {
-	const LazyComponent = lazy(importFn)
+    const LazyComponent = lazy(importFn)
 
-	return (
-		<Suspense fallback={null}>
-			<LazyComponent />
-		</Suspense>
-	)
+    return (
+        <Suspense fallback={null}>
+            <LazyComponent />
+        </Suspense>
+    )
 }
 
 export default loadPage
