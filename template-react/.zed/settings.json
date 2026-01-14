@@ -1,11 +1,41 @@
 {
     "tab_size": 4,
+    "format_on_save": "on",
+    "formatter": "language_server",
+    "languages": {
+        "TypeScript": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
+        },
+        "JavaScript": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
+        },
+        "TSX": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
+        }
+    },
     "lsp": {
         "tailwindcss-language-server": {
             "settings": {
-                "classFunctions": ["cva", "clsx"],
+                "classFunctions": [
+                    "cva",
+                    "clsx"
+                ],
                 "experimental": {
-                    "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"]
+                    "classRegex": [
+                        "[cls|className]\\s\\:\\=\\s\"([^\"]*)"
+                    ]
                 }
             }
         }
