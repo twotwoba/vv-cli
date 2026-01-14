@@ -23,19 +23,28 @@
                     "name": "oxfmt"
                 }
             }
+        },
+        "JSON": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
+        },
+        "JSONC": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
         }
     },
     "lsp": {
         "tailwindcss-language-server": {
             "settings": {
-                "classFunctions": [
-                    "cva",
-                    "clsx"
-                ],
+                "classFunctions": ["cva", "clsx"],
                 "experimental": {
-                    "classRegex": [
-                        "[cls|className]\\s\\:\\=\\s\"([^\"]*)"
-                    ]
+                    "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"]
                 }
             }
         }
