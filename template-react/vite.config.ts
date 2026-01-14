@@ -1,5 +1,4 @@
 import tailwindcss from "@tailwindcss/vite"
-import react from "@vitejs/plugin-react-swc"
 import { defineConfig, loadEnv } from "vite"
 
 // https://vite.dev/config/
@@ -13,7 +12,7 @@ export default defineConfig(({ mode }) => {
             // vite8新增
             tsconfigPaths: true
         },
-        plugins: [react(), tailwindcss()],
+        plugins: [tailwindcss()],
         build: {
             // outDir: env.VITE_BUILD_OUT_PATH,
             // vite8 默认配置

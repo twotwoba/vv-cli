@@ -28,14 +28,9 @@
     "lsp": {
         "tailwindcss-language-server": {
             "settings": {
-                "classFunctions": [
-                    "cva",
-                    "clsx"
-                ],
+                "classFunctions": ["cva", "clsx"],
                 "experimental": {
-                    "classRegex": [
-                        "[cls|className]\\s\\:\\=\\s\"([^\"]*)"
-                    ]
+                    "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"]
                 }
             }
         }
