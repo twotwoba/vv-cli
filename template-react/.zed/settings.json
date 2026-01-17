@@ -37,6 +37,13 @@
                     "name": "oxfmt"
                 }
             }
+        },
+        "HTML": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
         }
     },
     "lsp": {

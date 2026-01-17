@@ -37,6 +37,20 @@
                     "name": "oxfmt"
                 }
             }
+        },
+        "HTML": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
+        },
+        "Vue.js": {
+            "formatter": {
+                "language_server": {
+                    "name": "oxfmt"
+                }
+            }
         }
     }
 }
