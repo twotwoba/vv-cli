@@ -1,10 +1,12 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit",
-        "source.fixAll.stylelint": "explicit"
+        "source.fixAll.oxc": "always"
     },
-    "editor.tabSize": 4,
-    "stylelint.validate": ["css", "scss", "vue", "html"]
+    "tailwindCSS.experimental.classRegex": [
+        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
 }

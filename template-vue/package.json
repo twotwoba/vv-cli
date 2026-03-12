@@ -43,6 +43,10 @@
         "vite-plugin-svg-icons": "^2.0.1",
         "vue-tsc": "^2.2.12"
     },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,mjs,cjs}": "pnpm run lint",
+        "*": "oxfmt --no-error-on-unmatched-pattern"
+    },
     "pnpm": {
         "overrides": {
             "vite": "8.0.0-beta.0"
