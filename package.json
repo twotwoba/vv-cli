@@ -2,14 +2,29 @@
     "name": "@twotwoba/vv-cli",
     "version": "2.8.6",
     "description": "Easily create Vite + React/Vue3 project with TailwindCSS and other useful libraries. Also support Chrome extension.",
-    "type": "module",
+    "keywords": [
+        "chrome",
+        "cli",
+        "extension",
+        "motion",
+        "naive-ui",
+        "pinia",
+        "react",
+        "swr",
+        "tailwindcss",
+        "template",
+        "unocss",
+        "vite",
+        "vue3",
+        "zustand"
+    ],
+    "license": "MIT",
+    "author": "eric.yuan",
+    "repository": {
+        "url": "https://github.com/twotwoba/vv-cli"
+    },
     "bin": {
         "vv": "./bin/index.js"
-    },
-    "scripts": {
-        "build": "tsc",
-        "dev": "tsc --watch",
-        "prepublishOnly": "npm run build"
     },
     "files": [
         "bin",
@@ -17,28 +32,14 @@
         "template-vue",
         "template-vue-mobile",
         "template-extension",
+        "template-uniapp",
         "!**/node_modules/**"
     ],
-    "keywords": [
-        "vite",
-        "cli",
-        "template",
-        "react",
-        "tailwindcss",
-        "zustand",
-        "swr",
-        "motion",
-        "vue3",
-        "unocss",
-        "pinia",
-        "naive-ui",
-        "chrome",
-        "extension"
-    ],
-    "author": "eric.yuan",
-    "license": "MIT",
-    "repository": {
-        "url": "https://github.com/twotwoba/vv-cli"
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "chalk": "^5.4.1",
