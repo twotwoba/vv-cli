@@ -1,0 +1,17 @@
+schema: spec-driven
+
+context: |
+    Tech stack：TypeScript, Vue3, Uniapp for weixin mini-program, Unocss, Vite
+    API conventions: RESTful, JSON responses
+    Style: oxlint, oxfmt, strict TypeScript
+
+rules:
+    proposal:
+        - Include rollback plan
+        - Identify affected components
+    specs:
+        - Use Given/When/Then format for scenarios
+    design:
+        - Include sequence diagrams for complex flows
+    # tasks:
+    #     -
