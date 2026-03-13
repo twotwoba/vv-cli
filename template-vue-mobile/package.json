@@ -45,10 +45,5 @@
         "vite": "^8.0.0",
         "vite-plugin-svg-icons": "^2.0.1",
         "vue-tsc": "^2.2.12"
-    },
-    "pnpm": {
-        "overrides": {
-            "vite": "8.0.0-beta.0"
-        }
     }
 }
