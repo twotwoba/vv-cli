@@ -14,20 +14,23 @@ const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile");
 const templatePathReact = path.resolve(__dirname, "../template-react");
 const templatePathExtension = path.resolve(__dirname, "../template-extension");
 const templatePathUiLib = path.resolve(__dirname, "../template-ui-lib");
+const templatePathUniapp = path.resolve(__dirname, "../template-uniapp");
 // Read package.json to get version
 const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 const templateChoices = [
-    { name: "Vue3 + Vite + Naive UI + Unocss (Desktop)", value: "vue" },
-    { name: "Vue3 + Vite + Varlet + Unocss (Mobile)", value: "vue-mobile" },
-    { name: "React19 + Vite + shadcn/ui + tailwindcss", value: "react" },
-    { name: "Chrome Extension + React19 + tailwindcss", value: "extension" },
+    { name: "Vue3  + Unocss (Desktop)", value: "vue-desktop" },
+    { name: "Vue3  + Unocss (Mobile)", value: "vue-mobile" },
+    { name: "Vue3  + Unocss (Uniapp)", value: "uniapp" },
+    { name: "React19 + tailwindcss(Desktop)", value: "react-desktop" },
+    { name: "React19 + tailwindcss(Chrome Extension)", value: "chrome-extension" },
     { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" }
 ];
 const templatePaths = {
-    vue: templatePathVue,
+    "vue-desktop": templatePathVue,
     "vue-mobile": templatePathVueMobile,
-    react: templatePathReact,
-    extension: templatePathExtension,
+    uniapp: templatePathUniapp,
+    "react-desktop": templatePathReact,
+    "chrome-extension": templatePathExtension,
     "ui-lib": templatePathUiLib
 };
 /**
@@ -79,7 +82,14 @@ async function createProject(projectName, options) {
         let template;
         // Check if template is provided via CLI option
         if (options?.template) {
-            const validTemplates = ["vue", "vue-mobile", "react", "extension", "ui-lib"];
+            const validTemplates = [
+                "vue-desktop",
+                "vue-mobile",
+                "uniapp",
+                "react-desktop",
+                "chrome-extension",
+                "ui-lib"
+            ];
             if (!validTemplates.includes(options.template)) {
                 console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`));
                 process.exit(1);
@@ -120,10 +130,10 @@ async function createProject(projectName, options) {
             }
             // Update package.json
             const pkgPath = path.join(targetPath, "package.json");
-            const pkg = await fse.readJson(pkgPath);
+            const pkg = (await fse.readJson(pkgPath));
             pkg.name = projectName;
             // For Chrome Extension template, also update description
-            if (template === "extension") {
+            if (template === "chrome-extension") {
                 pkg.description = `A Chrome Extension for ${projectName}`;
             }
             await fse.writeJson(pkgPath, pkg, { spaces: 2 });
@@ -139,7 +149,7 @@ async function createProject(projectName, options) {
         console.log(chalk.cyan(`  cd ${projectName}`));
         console.log(chalk.cyan("  pnpm install"));
         console.log(chalk.cyan("  pnpm dev"));
-        if (template === "extension") {
+        if (template === "chrome-extension") {
             console.log("\n📌 Chrome Extension Development:");
             console.log(chalk.yellow("  1. Run 'pnpm dev' to build the extension"));
             console.log(chalk.yellow("  2. Open Chrome and go to chrome://extensions/"));
@@ -174,6 +184,6 @@ program
     .version(packageJson.version);
 program
     .argument("[project-name]", "Name of the project")
-    .option("-t, --template <template>", "Template to use (vue, vue-mobile, react, extension, ui-lib)")
+    .option("-t, --template <template>", "Template to use (vue, vue-mobile, uniapp, react, extension, ui-lib)")
     .action(createProject);
 program.parse();

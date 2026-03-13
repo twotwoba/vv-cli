@@ -1,7 +1,6 @@
-
 Here is the updated `README.zh-CN.md`:
 
-```/Users/eric/dev/vv-cli/README.zh-CN.md
+````/Users/eric/dev/vv-cli/README.zh-CN.md
 简体中文 | [English](README.md)
 
 # 🚀 React、Vue 与 Chrome 扩展开发模板
@@ -59,6 +58,13 @@ Here is the updated `README.zh-CN.md`:
 
 ---
 
+## 🦄 Vue 3 Uniapp 开发模板
+
+1.  **Unocss**: 强大的组合，用于样式设计和灵活的图标管理方案。
+2.  **跨平台支持**: 一次构建，部署到 iOS、Android、H5 和各种小程序平台。
+
+---
+
 ## 🧩 Chrome 扩展开发模板
 
 一个使用 React 19、TypeScript 和 Manifest V3 构建的现代 Chrome 扩展模板：
@@ -82,6 +88,6 @@ npm i @twotwoba/vv-cli -g
 
 # 创建新项目
 vv <your-project-name>
-```
+````
 
 选择您偏爱的模板，立即开始构建您的下一个出色应用程序吧！

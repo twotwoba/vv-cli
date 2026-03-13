@@ -10,9 +10,9 @@ Streamline your development workflow with these opinionated, feature-rich templa
 
 We've taken care of the essential setup so you can focus on building amazing applications:
 
--   **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
--   **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
--   **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
+- **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
+- **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
+- **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
 
 > template-vue and template-vue-mobile now is using Vite8(rolldown beta)
 
@@ -52,6 +52,13 @@ Based on the official [Vue-TS](https://github.com/vitejs/vite/tree/main/packages
 3.  **Tanstack Query**: Powerful asynchronous state management for data fetching, caching, and synchronization.
 4.  **vueuse**: A collection of frequently used, battle-tested Vue Hooks to enhance your component logic.
 5.  **Pinia State Management**: A simple, intuitive, and type-safe state management solution for Vue.
+
+---
+
+## 🦄 Vue 3 Uniapp Development Template
+
+1.  **Unocss**: A powerful combination for styling and flexible icon management.
+2.  **Cross-platform Support**: Build once, deploy to iOS, Android, H5, and various mini-programs.
 
 ---
 
