@@ -2,7 +2,9 @@
 
 # 🚀 React, Vue & Chrome Extension Development Templates
 
-Streamline your development workflow with these opinionated, feature-rich templates for Vue 3, React 19, and Chrome Extensions, powered by Vite 5+. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
+Streamline your development workflow with these opinionated, feature-rich templates for Vue 3, React 19, powered by Vite 8. Each template is meticulously configured to get you up and running with a consistent, modern development experience.
+
+> Only Uniapp still use Vite5+
 
 ---
 
@@ -13,8 +15,6 @@ We've taken care of the essential setup so you can focus on building amazing app
 - **Unified Code Style**: A project-level `settings.json` for VS Code ensures consistent code formatting (integrated with ESLint, StyleLint, and Prettier). While this template optimizes for VS Code users, developers using other editors will need to install and configure their own dependencies for a similar experience.
 - **Package Manager**: We standardize on **pnpm** for efficient and reliable dependency management.
 - **Blazing Fast Development**: Both templates leverage **Vite 5+** for an incredibly fast development server and build times.
-
-> template-vue and template-vue-mobile now is using Vite8(rolldown beta)
 
 ---
 

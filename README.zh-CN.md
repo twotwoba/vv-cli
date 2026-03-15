@@ -5,7 +5,9 @@ Here is the updated `README.zh-CN.md`:
 
 # 🚀 React、Vue 与 Chrome 扩展开发模板
 
-通过这些精心打造、功能丰富的 Vue 3、React 19 和 Chrome 扩展模板来简化您的开发工作流程，它们都由 Vite 5+ 提供支持。每个模板都经过精心配置，旨在为您提供一致且现代的开发体验。
+通过这些精心打造、功能丰富的 Vue 3、React 19 在不同场景下的模板来简化您的开发工作流程，它们都由 Vite 8 提供支持。每个模板都经过精心配置，旨在提供一致且现代的开发体验。
+
+> 目前仅 Uniapp 仍使用 Vite5.
 
 ---
 
@@ -16,8 +18,6 @@ Here is the updated `README.zh-CN.md`:
 -   **统一代码风格**：一个项目级别的 `settings.json` 文件用于 VS Code，确保代码格式化的一致性（集成了 ESLint、StyleLint 和 Prettier）。虽然此模板为 VS Code 用户进行了优化，但使用其他编辑器的开发者需要自行安装和配置相关依赖以获得类似体验。
 -   **包管理器**：我们统一使用 **pnpm**，以实现高效可靠的依赖管理。
 -   **极速开发体验**：两个模板都利用 **Vite 5+**，为您提供令人难以置信的快速开发服务器和构建时间。
-
-> template-vue 和 template-vue-mobile 现在使用 Vite8(rolldown beta)
 
 ---
 
