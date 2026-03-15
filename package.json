@@ -1,22 +1,17 @@
 {
     "name": "@twotwoba/vv-cli",
     "version": "2.9.0",
-    "description": "Easily create Vite + React/Vue3 project with TailwindCSS and other useful libraries. Also support Chrome extension.",
+    "description": "Easily create Vite + React19/Vue3 web/h5/mini-program/chrome-extension projects.",
     "keywords": [
-        "chrome",
+        "TanStack",
+        "chrome extension",
         "cli",
-        "extension",
-        "motion",
-        "naive-ui",
-        "pinia",
         "react",
-        "swr",
         "tailwindcss",
-        "template",
+        "uniapp",
         "unocss",
-        "vite",
-        "vue3",
-        "zustand"
+        "vite8",
+        "vue"
     ],
     "license": "MIT",
     "author": "eric.yuan",
