@@ -115,14 +115,14 @@ class Request {
         })
     }
 
-    get(url: string, data = {}, options = {}) {
-        return this.request({ url, method: "GET", data, ...options })
+    get<T>(url: string, data = {}, options = {}) {
+        return this.request<T>({ url, method: "GET", data, ...options })
     }
-    post(url: string, data = {}, options = {}) {
-        return this.request({ url, method: "POST", data, ...options })
+    post<T>(url: string, data = {}, options = {}) {
+        return this.request<T>({ url, method: "POST", data, ...options })
     }
-    put(url: string, data = {}, options = {}) {
-        return this.request({ url, method: "PUT", data, ...options })
+    put<T>(url: string, data = {}, options = {}) {
+        return this.request<T>({ url, method: "PUT", data, ...options })
     }
 }
 
