@@ -73,23 +73,19 @@ export default defineConfig(({ mode }) => {
             // cssMinify: "lightningcss",
             // minify:"oxc",
             sourcemap: !isProd,
-            target: 'esnext',
+            manifest: false,
             rolldownOptions: {
                 output: {
                     entryFileNames: 'assets/js/[name]-[hash].js',
                     chunkFileNames: 'assets/js/[name]-[hash].js',
-                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
-                },
-                minify: isProd
-                    ? {
-                          terserOptions: {
-                              compress: {
-                                  drop_console: true,
-                                  drop_debugger: true
-                              }
-                          }
-                      }
-                    : false
+                    assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+                    minify: {
+                        compress: {
+                            dropDebugger: !isProd,
+                            dropConsole: !isProd
+                        }
+                    }
+                }
             }
         },
         server: {
