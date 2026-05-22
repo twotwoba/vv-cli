@@ -1,3 +1,4 @@
+import { filterObjNull } from '@/utils'
 import { FetchError, processData, resolveError } from './server-helper'
 
 // ============================================================================
@@ -6,7 +7,7 @@ import { FetchError, processData, resolveError } from './server-helper'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
-interface RequestConfig extends Omit<RequestInit, 'body'> {
+interface RequestConfig extends Omit<RequestInit, 'body' | 'signal'> {
     body?: Record<string, unknown> | FormData | string
     params?: Record<string, unknown>
 }
@@ -14,6 +15,7 @@ interface RequestConfig extends Omit<RequestInit, 'body'> {
 interface FetcherOptions {
     baseURL?: string
     method?: HttpMethod
+    timeout?: number
 }
 
 // ============================================================================
@@ -21,20 +23,11 @@ interface FetcherOptions {
 // ============================================================================
 
 const AUTH_KEY = 'auth_token'
+const DEFAULT_TIMEOUT = 10_000
 
 // ============================================================================
 // Helpers
 // ============================================================================
-
-/**
- * 过滤对象中的 null/undefined 值
- */
-const filterObjNull = <T extends Record<string, unknown>>(obj: T): Partial<T> | undefined => {
-    if (typeof obj !== 'object' || obj == null) return
-    return Object.fromEntries(
-        Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)
-    ) as Partial<T>
-}
 
 /**
  * 构建请求 headers
@@ -98,10 +91,11 @@ export const fetcher = async <T = unknown>(
     options: RequestConfig & FetcherOptions = {}
 ): Promise<T> => {
     const {
-        baseURL = import.meta.env.VITE_API_URL,
+        baseURL = import.meta.env.VITE_FETCH_BASE_URL,
         method = 'GET',
         params,
         body,
+        timeout = DEFAULT_TIMEOUT,
         ...rest
     } = options
 
@@ -134,25 +128,38 @@ export const fetcher = async <T = unknown>(
         }
     }
 
-    const response = await fetch(url, {
-        ...rest,
-        method,
-        headers,
-        body: finalBody
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
 
-    if (!response.ok) {
-        const msg = resolveError(response.status)
-        throw new FetchError(msg, response.status, { url, method })
+    try {
+        const response = await fetch(url, {
+            ...rest,
+            method,
+            headers,
+            body: finalBody,
+            signal: controller.signal
+        })
+
+        if (!response.ok) {
+            const msg = resolveError(response.status)
+            throw new FetchError(msg, response.status, { url, method })
+        }
+
+        const contentType = response.headers.get('content-type')
+        if (contentType?.includes('application/json')) {
+            const res = await response.json()
+            return processData(res) as T
+        }
+
+        return response.text() as unknown as T
+    } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+            throw new FetchError('请求超时，请稍后重试', 408, { url, method })
+        }
+        throw error
+    } finally {
+        clearTimeout(timeoutId)
     }
-
-    const contentType = response.headers.get('content-type')
-    if (contentType?.includes('application/json')) {
-        const res = await response.json()
-        return processData(res) as T
-    }
-
-    return response.text() as unknown as T
 }
 
 export { FetchError, isFetchError } from './server-helper'

@@ -1,8 +1,11 @@
+import type { RouteRecordRaw, RouteMeta as VueRouteMeta } from 'vue-router'
+
 declare namespace AppRoute {
     type MenuType = 'dir' | 'page'
+
     /** 单个路由所携带的meta标识 */
-    interface RouteMeta {
-        /* 页面标题，通常必选。 */
+    interface RouteMeta extends VueRouteMeta {
+        /* 页面标题 */
         title: string
         /* 图标，一般配合菜单使用 */
         icon?: string
@@ -14,35 +17,33 @@ declare namespace AppRoute {
         isMenu?: boolean
     }
 
-    type MetaKeys = keyof RouteMeta
+    /** 静态路由类型（对应 basic-routes.ts 中的结构） */
+    type StaticRoute = RouteRecordRaw & {
+        meta?: RouteMeta
+        children?: StaticRoute[]
+    }
 
-    interface baseRoute {
-        /** 路由名称(路由唯一标识) */
+    /** 后端返回的动态路由原始数据 */
+    interface RemoteRouteRaw {
+        /** 路由名称 */
         name: string
         /** 路由路径 */
         path: string
         /** 路由重定向 */
         redirect?: string
-        /* 页面组件地址 */
+        /** 页面组件路径 */
         componentPath?: string | null
-        /* 路由id */
+        /** 路由id */
         id: number
-        /* 父级路由id，顶级页面为null */
+        /** 父级路由id，顶级页面为null */
         pid: number | null
+        /** 路由meta信息 */
+        meta?: RouteMeta
     }
 
-    /** 单个路由的类型结构(动态路由模式：后端返回此类型结构的路由) */
-    type RowRoute = RouteMeta & baseRoute
-
-    /**
-     * 挂载到项目上的真实路由结构
-     */
-    interface Route extends baseRoute {
-        /** 子路由 */
-        children?: Route[]
-        /* 页面组件 */
-        component: unknown
-        /** 路由描述 */
-        meta: RouteMeta
+    /** 转换后可挂载的动态路由 */
+    interface DynamicRoute extends Omit<RouteRecordRaw, 'meta'> {
+        meta?: RouteMeta
+        children?: DynamicRoute[]
     }
 }

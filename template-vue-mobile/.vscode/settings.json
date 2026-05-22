@@ -2,11 +2,5 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.oxc": "always"
-    },
-    "tailwindCSS.experimental.classRegex": [
-        ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-    ],
-    "files.associations": {
-        "*.css": "tailwindcss"
     }
 }

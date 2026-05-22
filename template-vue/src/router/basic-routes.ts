@@ -5,7 +5,7 @@ export const basicRoutes = [
     {
         name: 'root',
         path: '/',
-        redirect: import.meta.env.VITE_HOME_PATH,
+        redirect: import.meta.env.VITE_HOMEPAGE_PATH,
         // component: Layout, // someone layout component
         children: [
             {

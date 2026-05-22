@@ -1,5 +1,5 @@
-import { AUTH_KEY } from "@/constant/keys"
-import type { RequestConfig, ApiResponse, RequestInterceptors } from "@/types/request"
+import { AUTH_KEY } from '@/constant/keys'
+import type { RequestConfig, ApiResponse, RequestInterceptors } from '@/types/request'
 
 /**
  * 请求封装
@@ -23,7 +23,7 @@ class Request {
         // 合并基础配置
         const finalConfig: RequestConfig = {
             url: this.baseURL + options.url,
-            method: options.method || "GET",
+            method: options.method || 'GET',
             data: options.data || {},
             header: options.header || {},
             timeout: options.timeout || this.timeout
@@ -55,7 +55,7 @@ class Request {
                     if (res.statusCode !== 200) {
                         uni.showToast({
                             title: `请求失败：${res.statusCode}`,
-                            icon: "none",
+                            icon: 'none',
                             duration: 2000
                         })
                         reject({
@@ -84,8 +84,8 @@ class Request {
                     // 业务状态码校验（根据业务定制）
                     if (responseData.code !== 200) {
                         uni.showToast({
-                            title: responseData.message || "操作失败",
-                            icon: "none",
+                            title: responseData.message || '操作失败',
+                            icon: 'none',
                             duration: 2000
                         })
                         reject(responseData)
@@ -101,8 +101,8 @@ class Request {
                         reject(interceptorErr || err)
                     } else {
                         uni.showToast({
-                            title: err.errMsg || "网络异常",
-                            icon: "none",
+                            title: err.errMsg || '网络异常',
+                            icon: 'none',
                             duration: 2000
                         })
                         reject(err)
@@ -116,24 +116,24 @@ class Request {
     }
 
     get<T>(url: string, data = {}, options = {}) {
-        return this.request<T>({ url, method: "GET", data, ...options })
+        return this.request<T>({ url, method: 'GET', data, ...options })
     }
     post<T>(url: string, data = {}, options = {}) {
-        return this.request<T>({ url, method: "POST", data, ...options })
+        return this.request<T>({ url, method: 'POST', data, ...options })
     }
     put<T>(url: string, data = {}, options = {}) {
-        return this.request<T>({ url, method: "PUT", data, ...options })
+        return this.request<T>({ url, method: 'PUT', data, ...options })
     }
 }
 
-const baseURL = import.meta.env.VITE_API_URL
+const baseURL = import.meta.env.VITE_FETCH_BASE_URL
 const interceptors: RequestInterceptors = {
     request: (config) => {
         const token = uni.getStorageSync(AUTH_KEY)
         if (token) {
             config.header = {
                 ...config.header,
-                platform: "MINI_PROGRAM",
+                platform: 'MINI_PROGRAM',
                 Authorization: `Bearer ${token}`
             }
         }
@@ -145,7 +145,7 @@ const interceptors: RequestInterceptors = {
     },
     // 响应失败拦截器：统一处理错误
     responseFail: (error) => {
-        console.error("请求失败：", error)
+        console.error('请求失败：', error)
         return error
     }
 }

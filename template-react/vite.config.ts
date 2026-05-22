@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
         },
         plugins: [tailwindcss()],
         build: {
-            // outDir: env.VITE_BUILD_OUT_PATH,
+            // outDir: env.VITE_BUILD_OUT_DIR,
             // vite8 默认配置
             // cssMinify: "lightningcss",
             // minify:"oxc",

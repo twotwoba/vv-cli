@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const router = useRouter()
-const home = import.meta.env.VITE_HOME_PATH
+const home = import.meta.env.VITE_HOMEPAGE_PATH
 </script>
 <template>
     <div class="error-page">

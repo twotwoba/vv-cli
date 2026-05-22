@@ -38,6 +38,11 @@ const queryClient = new QueryClient({
 
 async function bootstrap() {
     const app = createApp(App)
+
+    app.config.errorHandler = (err, _instance, info) => {
+        console.error('[Global Error]', info, err)
+    }
+
     setupStore(app)
     app.use(VueQueryPlugin, { queryClient })
     await setupRouter(app)

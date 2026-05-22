@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store/modules/theme-store'
 
-const { toggle } = useThemeStore()
-const { isDark } = storeToRefs(useThemeStore())
+const { toggle, isDark } = storeToRefs(useThemeStore())
 </script>
 <template>
     <div class="page">

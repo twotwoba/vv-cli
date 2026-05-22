@@ -1,6 +1,6 @@
 <script setup>
 const router = useRouter()
-const home = import.meta.env.VITE_HOME_PATH
+const home = import.meta.env.VITE_HOMEPAGE_PATH
 </script>
 <template>
     <div flex-cc min-h-screen>
