@@ -10,7 +10,7 @@ on:
             dry_run:
                 description: "Dry run (不实际发布)"
                 required: false
-                default: "false"
+                default: false
                 type: boolean
 
 jobs:
@@ -26,11 +26,16 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10
+
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: "22"
-                  cache: "npm"
+                  cache: "pnpm"
                   # 不使用 registry-url，避免创建 .npmrc 干扰 OIDC 认证
 
             # npm Trusted Publishers 需要 npm 11.5.1+
@@ -41,10 +46,10 @@ jobs:
               run: npm --version
 
             - name: Install dependencies
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Build CLI
-              run: npm run build
+              run: pnpm run build
 
             - name: Verify CLI works
               run: |
