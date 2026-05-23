@@ -28,6 +28,7 @@
         "template-vue-mobile",
         "template-extension",
         "template-uniapp",
+        "template-ui-lib",
         "!**/node_modules/**"
     ],
     "type": "module",
