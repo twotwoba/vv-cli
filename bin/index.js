@@ -1,38 +1,41 @@
 #!/usr/bin/env node
-import { program } from "commander";
-import inquirer from "inquirer";
-import fse from "fs-extra";
-import path from "path";
-import chalk from "chalk";
-import ora from "ora";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { program } from "commander"
+import inquirer from "inquirer"
+import fse from "fs-extra"
+import path from "path"
+import chalk from "chalk"
+import ora from "ora"
+import { fileURLToPath } from "url"
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 // Template paths
-const templatePathVue = path.resolve(__dirname, "../template-vue");
-const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile");
-const templatePathReact = path.resolve(__dirname, "../template-react");
-const templatePathExtension = path.resolve(__dirname, "../template-extension");
-const templatePathUiLib = path.resolve(__dirname, "../template-ui-lib");
-const templatePathUniapp = path.resolve(__dirname, "../template-uniapp");
+const templatePathVue = path.resolve(__dirname, "../template-vue")
+const templatePathVueMobile = path.resolve(__dirname, "../template-vue-mobile")
+const templatePathReact = path.resolve(__dirname, "../template-react")
+const templatePathExtension = path.resolve(__dirname, "../template-extension")
+const templatePathUiLib = path.resolve(__dirname, "../template-ui-lib")
+const templatePathUniapp = path.resolve(__dirname, "../template-uniapp")
+const templatePathLib = path.resolve(__dirname, "../template-lib")
 // Read package.json to get version
-const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
+const packageJson = JSON.parse(fse.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"))
 const templateChoices = [
     { name: "Vue3  + Unocss (Desktop)", value: "vue-desktop" },
     { name: "Vue3  + Unocss (Mobile)", value: "vue-mobile" },
     { name: "Vue3  + Unocss (Uniapp)", value: "uniapp" },
     { name: "React19 + tailwindcss(Desktop)", value: "react-desktop" },
     { name: "React19 + tailwindcss(Chrome Extension)", value: "chrome-extension" },
-    { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" }
-];
+    { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" },
+    { name: "Tool Library (Vite8)", value: "lib" }
+]
 const templatePaths = {
     "vue-desktop": templatePathVue,
     "vue-mobile": templatePathVueMobile,
     uniapp: templatePathUniapp,
     "react-desktop": templatePathReact,
     "chrome-extension": templatePathExtension,
-    "ui-lib": templatePathUiLib
-};
+    "ui-lib": templatePathUiLib,
+    lib: templatePathLib
+}
 /**
  * Validate project name
  * - Must start with a letter, number, or @
@@ -41,18 +44,18 @@ const templatePaths = {
  */
 function validateProjectName(name) {
     if (!name || name.trim() === "") {
-        return "Project name is required";
+        return "Project name is required"
     }
     // Check for invalid characters
-    const validNameRegex = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/i;
+    const validNameRegex = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/i
     if (!validNameRegex.test(name)) {
-        return "Project name can only contain letters, numbers, hyphens, underscores, dots, and @ for scoped packages";
+        return "Project name can only contain letters, numbers, hyphens, underscores, dots, and @ for scoped packages"
     }
     // Check if directory already exists
     if (fse.existsSync(name)) {
-        return `Directory "${name}" already exists`;
+        return `Directory "${name}" already exists`
     }
-    return true;
+    return true
 }
 /**
  * Main CLI action
@@ -68,18 +71,17 @@ async function createProject(projectName, options) {
                     message: "Please enter your project name:",
                     validate: validateProjectName
                 }
-            ]);
-            projectName = answer.projectName;
-        }
-        else {
+            ])
+            projectName = answer.projectName
+        } else {
             // Validate provided project name
-            const validationResult = validateProjectName(projectName);
+            const validationResult = validateProjectName(projectName)
             if (validationResult !== true) {
-                console.error(chalk.red(`Error: ${validationResult}`));
-                process.exit(1);
+                console.error(chalk.red(`Error: ${validationResult}`))
+                process.exit(1)
             }
         }
-        let template;
+        let template
         // Check if template is provided via CLI option
         if (options?.template) {
             const validTemplates = [
@@ -88,15 +90,19 @@ async function createProject(projectName, options) {
                 "uniapp",
                 "react-desktop",
                 "chrome-extension",
-                "ui-lib"
-            ];
+                "ui-lib",
+                "lib"
+            ]
             if (!validTemplates.includes(options.template)) {
-                console.error(chalk.red(`Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`));
-                process.exit(1);
+                console.error(
+                    chalk.red(
+                        `Error: Invalid template "${options.template}". Valid options: ${validTemplates.join(", ")}`
+                    )
+                )
+                process.exit(1)
             }
-            template = options.template;
-        }
-        else {
+            template = options.template
+        } else {
             // Ask for template type interactively
             const answer = await inquirer.prompt([
                 {
@@ -105,85 +111,91 @@ async function createProject(projectName, options) {
                     message: "Select a template:",
                     choices: templateChoices
                 }
-            ]);
-            template = answer.template;
+            ])
+            template = answer.template
         }
-        const templatePath = templatePaths[template];
-        const targetPath = path.resolve(process.cwd(), projectName);
+        const templatePath = templatePaths[template]
+        const targetPath = path.resolve(process.cwd(), projectName)
         // Start spinner for copying files
-        const spinner = ora("Creating project directory...").start();
+        const spinner = ora("Creating project directory...").start()
         try {
             // Copy template files
             await fse.copy(templatePath, targetPath, {
                 filter: (src) => {
-                    const basename = path.basename(src);
-                    return basename !== "node_modules" && basename !== ".git";
+                    const basename = path.basename(src)
+                    return basename !== "node_modules" && basename !== ".git"
                 }
-            });
-            spinner.succeed("Project files copied");
+            })
+            spinner.succeed("Project files copied")
             // Rename gitignore to .gitignore
-            spinner.start("Configuring project...");
-            const gitignorePath = path.join(targetPath, "gitignore");
-            const dotGitignorePath = path.join(targetPath, ".gitignore");
+            spinner.start("Configuring project...")
+            const gitignorePath = path.join(targetPath, "gitignore")
+            const dotGitignorePath = path.join(targetPath, ".gitignore")
             if (await fse.pathExists(gitignorePath)) {
-                await fse.rename(gitignorePath, dotGitignorePath);
+                await fse.rename(gitignorePath, dotGitignorePath)
             }
             // Update package.json
-            const pkgPath = path.join(targetPath, "package.json");
-            const pkg = (await fse.readJson(pkgPath));
-            pkg.name = projectName;
+            const pkgPath = path.join(targetPath, "package.json")
+            const pkg = await fse.readJson(pkgPath)
+            pkg.name = projectName
             // For Chrome Extension template, also update description
             if (template === "chrome-extension") {
-                pkg.description = `A Chrome Extension for ${projectName}`;
+                pkg.description = `A Chrome Extension for ${projectName}`
             }
-            await fse.writeJson(pkgPath, pkg, { spaces: 2 });
-            spinner.succeed("Project configured");
-        }
-        catch (error) {
-            spinner.fail("Failed to create project");
-            throw error;
+            await fse.writeJson(pkgPath, pkg, { spaces: 2 })
+            spinner.succeed("Project configured")
+        } catch (error) {
+            spinner.fail("Failed to create project")
+            throw error
         }
         // Success message
-        console.log(chalk.green("\n✨ Project created successfully!\n"));
-        console.log("Next steps:");
-        console.log(chalk.cyan(`  cd ${projectName}`));
-        console.log(chalk.cyan("  pnpm install"));
-        console.log(chalk.cyan("  pnpm dev"));
+        console.log(chalk.green("\n✨ Project created successfully!\n"))
+        console.log("Next steps:")
+        console.log(chalk.cyan(`  cd ${projectName}`))
+        console.log(chalk.cyan("  pnpm install"))
+        console.log(chalk.cyan("  pnpm dev"))
         if (template === "chrome-extension") {
-            console.log("\n📌 Chrome Extension Development:");
-            console.log(chalk.yellow("  1. Run 'pnpm dev' to build the extension"));
-            console.log(chalk.yellow("  2. Open Chrome and go to chrome://extensions/"));
-            console.log(chalk.yellow("  3. Enable 'Developer mode'"));
-            console.log(chalk.yellow("  4. Click 'Load unpacked' and select the 'dist' folder"));
-            console.log(chalk.yellow("  5. Your extension will be loaded and ready for development!"));
+            console.log("\n📌 Chrome Extension Development:")
+            console.log(chalk.yellow("  1. Run 'pnpm dev' to build the extension"))
+            console.log(chalk.yellow("  2. Open Chrome and go to chrome://extensions/"))
+            console.log(chalk.yellow("  3. Enable 'Developer mode'"))
+            console.log(chalk.yellow("  4. Click 'Load unpacked' and select the 'dist' folder"))
+            console.log(
+                chalk.yellow("  5. Your extension will be loaded and ready for development!")
+            )
         }
         if (template === "ui-lib") {
-            console.log("\n📦 UI Component Library Development:");
-            console.log(chalk.yellow("  • 'pnpm dev' - Start the playground for component development"));
-            console.log(chalk.yellow("  • 'pnpm build' - Build the component library"));
-            console.log(chalk.yellow("  • 'pnpm build:all' - Build all packages"));
-            console.log(chalk.yellow("  • Components are in packages/components/src/"));
-            console.log(chalk.yellow("  • Test components in the playground/"));
+            console.log("\n📦 UI Component Library Development:")
+            console.log(
+                chalk.yellow("  • 'pnpm dev' - Start the playground for component development")
+            )
+            console.log(chalk.yellow("  • 'pnpm build' - Build the component library"))
+            console.log(chalk.yellow("  • 'pnpm build:all' - Build all packages"))
+            console.log(chalk.yellow("  • Components are in packages/components/src/"))
+            console.log(chalk.yellow("  • Test components in the playground/"))
         }
-        console.log("");
-    }
-    catch (error) {
+        console.log("")
+    } catch (error) {
         if (error instanceof Error) {
-            console.error(chalk.red("Error creating project:"), error.message);
+            console.error(chalk.red("Error creating project:"), error.message)
+        } else {
+            console.error(chalk.red("Error creating project:"), error)
         }
-        else {
-            console.error(chalk.red("Error creating project:"), error);
-        }
-        process.exit(1);
+        process.exit(1)
     }
 }
 // Setup CLI
 program
     .name("vv")
-    .description("CLI tool for creating Vue3/React + Vite projects, Chrome Extensions, and UI Component Libraries")
-    .version(packageJson.version);
+    .description(
+        "CLI tool for creating Vue3/React + Vite projects, Chrome Extensions, and UI Component Libraries"
+    )
+    .version(packageJson.version)
 program
     .argument("[project-name]", "Name of the project")
-    .option("-t, --template <template>", "Template to use (vue, vue-mobile, uniapp, react, extension, ui-lib)")
-    .action(createProject);
-program.parse();
+    .option(
+        "-t, --template <template>",
+        "Template to use (vue, vue-mobile, uniapp, react, extension, ui-lib, lib)"
+    )
+    .action(createProject)
+program.parse()

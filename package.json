@@ -29,6 +29,7 @@
         "template-extension",
         "template-uniapp",
         "template-ui-lib",
+        "template-lib",
         "!**/node_modules/**"
     ],
     "type": "module",

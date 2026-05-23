@@ -18,6 +18,7 @@ const templatePathReact = path.resolve(__dirname, "../template-react")
 const templatePathExtension = path.resolve(__dirname, "../template-extension")
 const templatePathUiLib = path.resolve(__dirname, "../template-ui-lib")
 const templatePathUniapp = path.resolve(__dirname, "../template-uniapp")
+const templatePathLib = path.resolve(__dirname, "../template-lib")
 
 // Read package.json to get version
 const packageJson = JSON.parse(
@@ -32,6 +33,7 @@ type TemplateType =
     | "react-desktop"
     | "chrome-extension"
     | "ui-lib"
+    | "lib"
 
 interface TemplateChoice {
     name: string
@@ -44,7 +46,8 @@ const templateChoices: TemplateChoice[] = [
     { name: "Vue3  + Unocss (Uniapp)", value: "uniapp" },
     { name: "React19 + tailwindcss(Desktop)", value: "react-desktop" },
     { name: "React19 + tailwindcss(Chrome Extension)", value: "chrome-extension" },
-    { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" }
+    { name: "Vue3 UI Component Library (pnpm monorepo)", value: "ui-lib" },
+    { name: "Tool Library (Vite8)", value: "lib" }
 ]
 
 const templatePaths: Record<TemplateType, string> = {
@@ -53,7 +56,8 @@ const templatePaths: Record<TemplateType, string> = {
     uniapp: templatePathUniapp,
     "react-desktop": templatePathReact,
     "chrome-extension": templatePathExtension,
-    "ui-lib": templatePathUiLib
+    "ui-lib": templatePathUiLib,
+    lib: templatePathLib
 }
 
 /**
@@ -116,7 +120,8 @@ async function createProject(projectName?: string, options?: { template?: string
                 "uniapp",
                 "react-desktop",
                 "chrome-extension",
-                "ui-lib"
+                "ui-lib",
+                "lib"
             ]
             if (!validTemplates.includes(options.template as TemplateType)) {
                 console.error(
@@ -232,7 +237,7 @@ program
     .argument("[project-name]", "Name of the project")
     .option(
         "-t, --template <template>",
-        "Template to use (vue, vue-mobile, uniapp, react, extension, ui-lib)"
+        "Template to use (vue, vue-mobile, uniapp, react, extension, ui-lib, lib)"
     )
     .action(createProject)
 
